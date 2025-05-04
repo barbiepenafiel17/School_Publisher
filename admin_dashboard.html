@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article Management Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="ad.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="sidebar">
+    <h2>DBCLM COLLEGE</h2>
+    <nav>
+      <h2>DASHBOARD</h2>
+      <a href="admin_dashboard.html" class="active">ARTICLES</a>
+      <a href="user.html">USER</a>
+      <a href="announcement.html">ANNOUNCEMENT</a>
+      <a href="setting.html">SETTINGS</a>
+    </nav>
+    <div style="position: absolute; bottom: 20px;">
+      <a href="logout.html">LOGOUT</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="topbar">
+      <h1>Article Management Dashboard</h1>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <p>Total Submission</p>
+        <h2>100</h2>
+      </div>
+      <div class="stat-card">
+        <p>Pending Reviews</p>
+        <h2 id="pendingCount">20</h2>
+      </div>
+      <div class="stat-card">
+        <p>Approved Articles</p>
+        <h2>70</h2>
+      </div>
+      <div class="stat-card">
+        <p>Rejected Articles</p>
+        <h2>10</h2>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" placeholder="Search articles by title, author or content">
+      <select>
+        <option>All Institutes</option>
+      </select>
+      <select>
+        <option>All Status</option>
+      </select>
+      <button>Apply Filter</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Article</th>
+          <th>Author</th>
+          <th>Institutes</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sample Article Title</td>
+          <td>
+            John Doe<br>
+            <a href="mailto:johndoe@example.com">johndoe@example.com</a>
+          </td>
+          <td>Institute of Computing</td>
+          <td>May 4, 2025</td>
+          <td>
+            <span class="status approved">APPROVED</span>
+          </td>
+          <td class="actions">
+            <button class="accept-btn">Approve</button>
+            <button class="reject-btn">Reject</button>
+            <button class="view-btn">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function openModal(articleId) {
+      const modal = document.getElementById('rejectModal');
+      document.getElementById('articleId').value = articleId;
+      modal.style.display = 'block';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('rejectModal');
+      modal.style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

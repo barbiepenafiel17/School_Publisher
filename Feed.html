@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DBCLM College</title>
+    <link rel="stylesheet" href="Feed.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <img src="images/LOGO.jpg" alt="DBCLM Logo">
+        </div>
+        <nav class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Latest</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="navbar-right">
+            <img src="images/bell.png" alt="Notifications" class="icon-bell">
+            <span class="user-label">USER</span>
+        </div>
+    </header>
+
+
+    <div class="main-div">
+        <div class="container">
+            <div class="sidebars">
+                <div class="sidebar sidebar-box">
+                    <ul>
+                        <li>
+                            <img src="images/profile.jpg" alt="Profile"> <span>My Profile</span>
+                        </li>
+                        <li>
+                            <img src="images/article.jpg" alt="Saved"> <span>Save Articles</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="box sidebar-box">
+                    <h3>Institutes</h3>
+                    <label><input type="checkbox" checked> All Institutes</label> <br>
+                    <label><input type="checkbox"> Institute of Computing</label> <br>
+                    <label><input type="checkbox"> Institute of Leadership</label> <br>
+                    <label><input type="checkbox"> Institute of Teacher Education</label> <br>
+                    <label><input type="checkbox"> Institute of Aquatic and Applied Sciences</label>
+                </div>
+
+                <div class="box1 sidebar-box">
+                    <h3>School Announcement</h3>
+                    <div class="announcement yellow">Early Dismissal: April 18, 1:30 PM</div>
+                    <div class="announcement purple">Yearbook Orders: Deadline is April 20</div>
+                    <div class="announcement green">Summer Programs: Opens next Monday</div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main">
+
+                <div class="main-content">
+
+                    <div class="post-box">
+                        <div class="post-box-content">
+                            <img src="images/GirlFace.jpg" alt="User" class="avatar">
+                            <form class="" action="submit_article.php" method="POST">
+                                <input class="post-input" type="text" id="articleInput" name="title"
+                                    placeholder="Whats on your mind? Want to publish your own article?">
+                            </form>
+                        </div>
+
+
+                        <div class="center-button">
+                            <button class="publish-btn"><strong>PUBLISH ARTICLE</strong> ✎</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="post-content">
+
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-profile">
+                                <img src="images/GirlFace.jpg" class="profile-pic">
+                                <div>
+                                    <strong>Cheny Dalogdog</strong><br>
+                                    <small>April 8, 2025 • 08:15AM</small>
+                                </div>
+                            </div>
+
+                            <div class="post-menu">
+                                <button>. . .</button>
+                            </div>
+
+                        </div>
+                        <h2>Important Announcement: Campus Renovation Updates</h2>
+                        <p>Dear School Community, I’m excited to share that our campus renovation project is progressing
+                            ahead of schedule! The new Science Building will be ready by May 15th...</p>
+                        <img src="images/LPic2.jpg" class="post-image">
+
+                        <div class="post-actions">
+                            <span>👍 142</span>
+                            <span>💬 Comment</span>
+                        </div>
+
+                        <div class="comment">
+                            <img src="images/GirlFace.jpg" class="profile-pic">
+                            <div>
+                                <strong>Marjorie Casilao</strong> <span class="tag">Institute of Computing</span>
+                                <p>This is fantastic news! My students can’t wait to use the new lab facilities.</p>
+                                <small>2h ago</small>
+                            </div>
+                        </div>
+
+                        <div class="comment-box">
+                            <img src="images/GirlFace.jpg" class="profile-pic">
+                            <input type="text" placeholder="Write a comment...">
+                            <button>📩</button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <p>Keeping the community<br>informed and connected.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li>Home</li>
+                    <li>Latest</li>
+                    <li>About</li>
+                    <li>Contact us</li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Categories</h4>
+                <ul>
+                    <li>Academics</li>
+                    <li>Sports</li>
+                    <li>Arts and Culture</li>
+                    <li>Faculty Spotlight</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Speechforge. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+
+</body>
+
+</html>
