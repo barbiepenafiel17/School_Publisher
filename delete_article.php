@@ -1,48 +1,44 @@
 <?php
 session_start();
 
-// Include your database connection
-$conn = new mysqli("localhost", "root", "", "dbclm_college");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once 'db_connect.php';
+require_once 'helpers/db_helpers.php';
 
-
-if (!isset($_SESSION['user_id']) || !isset($_POST['article_id'])) {
+// Redirect if user is not authenticated or article_id is missing
+if (!isset($_SESSION['user_id'], $_POST['article_id']) || !is_numeric($_POST['article_id'])) {
     header("Location: login.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+$user_id = (int) $_SESSION['user_id'];
 $user_role = $_SESSION['role'];
-$article_id = $_POST['article_id'];
+$article_id = (int) $_POST['article_id'];
 
-// Check if the article belongs to user or user is admin
-$check_stmt = $conn->prepare("SELECT user_id FROM articles WHERE id = ?");
-$check_stmt->bind_param("i", $article_id);
-$check_stmt->execute();
-$result = $check_stmt->get_result();
+try {
+    // Check if the article belongs to the user or if the user is an admin
+    $stmt = $pdo->prepare("SELECT user_id FROM articles WHERE id = ?");
+    $stmt->execute([$article_id]);
 
-if ($result->num_rows > 0) {
-    $article = $result->fetch_assoc();
-    if ($article['user_id'] == $user_id || $user_role === 'admin') {
-        // Soft delete: set status to 'DELETED'
-        $update_stmt = $conn->prepare("UPDATE articles SET status = 'DELETED' WHERE id = ?");
-        $update_stmt->bind_param("i", $article_id);
-        if ($update_stmt->execute()) {
-            header("Location: newsfeed.php?deleted=1");
-            exit();
+    if ($stmt->rowCount() > 0) {
+        $article = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($article['user_id'] === $user_id || $user_role === 'admin') {
+            // Soft delete: set status to 'DELETED'
+            $update_stmt = $pdo->prepare("UPDATE articles SET status = 'DELETED' WHERE id = ?");
+            $update_stmt->execute([$article_id]);
+
+            if ($update_stmt->rowCount() > 0) {
+                header("Location: newsfeed.php?deleted=1");
+                exit();
+            } else {
+                echo json_encode(['error' => 'Failed to delete the article.']);
+            }
         } else {
-            echo "❌ Error deleting article.";
+            echo json_encode(['error' => 'You do not have permission to delete this article.']);
         }
-        $update_stmt->close();
     } else {
-        echo "❌ You don't have permission to delete this article.";
+        echo json_encode(['error' => 'Article not found.']);
     }
-} else {
-    echo "❌ Article not found.";
+} catch (PDOException $e) {
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
 }
-
-$check_stmt->close();
-$conn->close();
 ?>
