@@ -47,6 +47,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
     <title>DBCLM College</title>
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="newsfeed.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -122,7 +123,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 Image</button>
                                         </div>
                                     </div>
-                                    <div class="form-group full-width toggle-section">
+                                    <!-- <div class="form-group full-width toggle-section">
                                         <label>Additional Options</label>
                                         <div class="toggles">
                                             <div class="toggle-item">
@@ -147,9 +148,9 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="form-actions">
-                                        <button type="button" class="draft-btn">Save as Draft</button>
+                                        <!-- <button type="button" class="draft-btn">Save as Draft</button> -->
                                         <button type="submit" class="submit-btn">Submit for Review</button>
                                     </div>
                                 </form>
@@ -179,19 +180,20 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                         <button class="dot-btn" onclick="toggleDropdown(this)">...</button>
                                         <div class="dropdown-content"
                                             style="display: none; position: absolute; top: 0; right: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">
-                                            <!-- Delete -->
-                                            <form method="POST" action="delete_article.php"
-                                                onsubmit="return confirm('Delete this article?');">
-                                                <input type="hidden" name="article_id" value="<?= $articleId ?>">
-                                                <button type="submit"
-                                                    style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;">Delete</button>
-                                            </form>
-
+                                            <?php if($row['user_id'] == $_SESSION['user_id']): ?>
+                                                    <!-- Delete -->
+                                                    <form method="POST" action="delete_article.php"
+                                                        onsubmit="return confirm('Delete this article?');">
+                                                        <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                        <button type="submit"
+                                                            style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-trash-o" style="margin-right:10px;"></i>Delete</button>
+                                                    </form>
+                                            <?php endif ?>
                                             <!-- Hide -->
                                             <form method="POST" action="hide_article.php">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;">Hide</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-eye-slash" style="margin-right:10px;"></i>Hide</button>
                                             </form>
 
                                             <!-- Report -->
@@ -199,7 +201,12 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 onsubmit="return confirm('Report this article to admin?');">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;">Report</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-exclamation-triangle" style="margin-right:10px; color:yellow;" ></i>Report</button>
+                                            </form>
+                                            <form method="POST" action="save_article.php">
+                                                <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                <button type="submit"
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
                                             </form>
                                         </div>
                                     </div>

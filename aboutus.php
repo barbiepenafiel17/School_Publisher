@@ -1,3 +1,45 @@
+<?php
+// Refactored to improve maintainability and modularity
+require_once 'helpers/db_helpers.php';
+require_once 'db_connect.php';
+require_once 'filter_feed.php';
+
+session_start();
+
+// Redirect to login if user is not authenticated
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+if (!is_numeric($user_id)) {
+    die("Invalid user ID.");
+}
+
+// Fetch user info
+$user = getUserInfo($pdo, $user_id);
+if (!$user) {
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+$full_name = htmlspecialchars($user['full_name']);
+$profile_picture = !empty($user['profile_picture']) ? 'uploads/profile_pictures/' . htmlspecialchars($user['profile_picture']) : 'uploads/profile_pictures/default_profile.png';
+
+// Fetch unread notifications
+$unreadNotifications = getUnreadNotifications($pdo, $user_id);
+$notifCount = count($unreadNotifications);
+
+// Fetch articles and announcements
+$institutes = ['All'];
+$sortOption = $_POST['sort'] ?? 'new'; // Get sort option from POST request or default to 'new'
+$articles = getFilteredArticles($pdo, $institutes, $sortOption);
+$latest_announcements = getLatestAnnouncements($pdo);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,7 +135,7 @@
             </div>
             <div class="right">
                 <p class="description">We believe in inspiring talent to reach their fullest potential and creating opportunities that drive growth and success.</p>
-                <a href="#" class="open-position">See open position →</a>
+        
             </div>
         </div>
     </section>
