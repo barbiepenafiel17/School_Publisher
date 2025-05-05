@@ -18,18 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("iis", $articleId, $userId, $commentText);
 
         if ($stmt->execute()) {
-            // Success, redirect back
-            header("Location: " . $_SERVER['HTTP_REFERER']);
-            exit();
+            // Success, return JSON response
+            echo json_encode(['success' => true]);
         } else {
-            echo "Error saving comment.";
+            echo json_encode(['success' => false, 'error' => 'Error saving comment.']);
         }
 
         $stmt->close();
     } else {
-        echo "Invalid input.";
+        echo json_encode(['success' => false, 'error' => 'Invalid input.']);
     }
 } else {
-    echo "Invalid request.";
+    echo json_encode(['success' => false, 'error' => 'Invalid request.']);
 }
 ?>

@@ -180,19 +180,19 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Setup comment forms
-  document.querySelectorAll('.comment-form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const articleId = this.querySelector('input[name="article_id"]').value;
-      const commentText = this.querySelector('input[name="comment_text"]').value;
+  // document.querySelectorAll('.comment-form').forEach(form => {
+  //   form.addEventListener('submit', function(e) {
+  //     e.preventDefault();
+  //     const articleId = this.querySelector('input[name="article_id"]').value;
+  //     const commentText = this.querySelector('input[name="comment_text"]').value;
       
-      if (articleId && commentText) {
-        DatabaseHelper.postComment(articleId, commentText)
-          .then(() => {
-            // Clear the comment input after posting
-            this.querySelector('input[name="comment_text"]').value = '';
-          });
-      }
-    });
-  });
+  //     if (articleId && commentText) {
+  //       DatabaseHelper.postComment(articleId, commentText)
+  //         .then(() => {
+  //           // Clear the comment input after posting
+  //           this.querySelector('input[name="comment_text"]').value = '';
+  //         });
+  //     }
+  //   });
+  // });
 });

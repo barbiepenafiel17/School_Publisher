@@ -26,11 +26,12 @@
   <ul class="checkbox-list">
     <li><input type="checkbox" class="institute-filter" value="All" checked> All Institutes</li>
     <li><input type="checkbox" class="institute-filter" value="IC"> Institute of Computing</li>
-    <li><input type="checkbox" class="institute-filter" value="ITed"> Institute of Leadership Entrepreneurship, and Good
+    <li><input type="checkbox" class="institute-filter" value="ILEGG"> Institute of Leadership Entrepreneurship, and
+      Good
       Governance</li>
-    <li><input type="checkbox" class="institute-filter" value="Institute of Teacher Education"> Institute of Teacher
+    <li><input type="checkbox" class="institute-filter" value="ITed"> Institute of Teacher
       Education</li>
-    <li><input type="checkbox" class="institute-filter" value="Institute of Aquatic and Applied Sciences"> Institute of
+    <li><input type="checkbox" class="institute-filter" value="IAAS"> Institute of
       Aquatic and Applied Sciences</li>
   </ul>
 </div>

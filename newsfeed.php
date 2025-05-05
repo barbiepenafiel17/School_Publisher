@@ -180,12 +180,14 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                         <div class="dropdown-content"
                                             style="display: none; position: absolute; top: 0; right: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">
                                             <!-- Delete -->
-                                            <form method="POST" action="delete_article.php"
-                                                onsubmit="return confirm('Delete this article?');">
-                                                <input type="hidden" name="article_id" value="<?= $articleId ?>">
-                                                <button type="submit"
-                                                    style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;">Delete</button>
-                                            </form>
+                                            <?php if ($row['user_id'] == $_SESSION['user_id']): ?>
+                                                <form method="POST" action="delete_article.php"
+                                                    onsubmit="return confirm('Delete this article?');">
+                                                    <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                    <button type="submit"
+                                                        style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;">Delete</button>
+                                                </form>
+                                            <?php endif; ?>
 
                                             <!-- Hide -->
                                             <form method="POST" action="hide_article.php">
@@ -206,7 +208,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                 </div>
 
                                 <div class="post-title"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
-                                <div class="post-content"><?= htmlspecialchars($row['abstract']) ?></div>
+                                <div class="post-content"><?= $row['abstract'] ?></div>
 
                                 <?php if (!empty($row['featured_image'])): ?>
                                     <div class="post-image">
@@ -215,7 +217,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                     </div>
                                 <?php endif; ?>
 
-                                <div class="post-actions">
+                                      <div class="post-actions">
                                     <button class="like-btn" data-article-id="<?= $articleId ?>">
                                         👍 <span class="like-count"
                                             id="like-count-<?= $articleId ?>"><?= $row['likes'] ?></span>
@@ -248,7 +250,8 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                         <?php endif; ?>
                                     </div>
 
-                                    <form method="POST" action="post_comment.php" class="comment-form">
+                                    <form method="POST" action="post_comment.php" class="comment-form"
+                                        id="comment-form-<?= $articleId ?>">
                                         <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                         <input class="comment-box" type="text" name="comment_text"
                                             placeholder="Write a comment..." required>

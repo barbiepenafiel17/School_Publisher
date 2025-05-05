@@ -62,60 +62,84 @@ function getApprovedArticles(PDO $pdo)
  */
 function getFilteredArticles(PDO $pdo, array $institutes, string $sortOption = 'new'): array
 {
-  // If the institutes array is empty or contains 'All', fetch all approved articles
-  if (empty($institutes) || in_array('All', $institutes)) {
-    $query = "SELECT a.*, u.full_name, u.profile_picture,
-                  (SELECT COUNT(*) FROM reactions WHERE article_id = a.id AND reaction_type = 'like') AS likes,
-                  (SELECT COUNT(*) FROM comments WHERE article_id = a.id) AS comments
-                  FROM articles a
-                  JOIN users u ON a.user_id = u.id
-                  WHERE a.status = 'approved'";
-
-    // Add sorting logic
-    switch ($sortOption) {
-      case 'old':
-        $query .= " ORDER BY a.created_at ASC";
-        break;
-      case 'popular':
-      case 'hottest': // Assuming 'hottest' is the same as 'popular'
-        $query .= " ORDER BY likes DESC";
-        break;
-      case 'new':
-      default:
-        $query .= " ORDER BY a.created_at DESC";
-        break;
-    }
-
-    $stmt = $pdo->query($query);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  // Start session if not already started
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
   }
 
-  // Otherwise, filter by the provided institutes
-  $placeholders = implode(',', array_fill(0, count($institutes), '?'));
-  $query = "SELECT a.*, u.full_name, u.profile_picture,
+  $userId = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+
+  // Base query to get articles and exclude hidden ones
+  $baseQuery = "SELECT a.*, u.full_name, u.profile_picture,
               (SELECT COUNT(*) FROM reactions WHERE article_id = a.id AND reaction_type = 'like') AS likes,
               (SELECT COUNT(*) FROM comments WHERE article_id = a.id) AS comments
               FROM articles a
               JOIN users u ON a.user_id = u.id
-              WHERE a.status = 'approved' AND u.institute IN ($placeholders)";
+              WHERE a.status = 'approved' 
+              AND NOT EXISTS (
+                SELECT 1 FROM hidden_articles h 
+                WHERE h.article_id = a.id AND h.user_id = :userId
+              )";
+
+  // Filter by user's institute, handling abbreviations correctly
+  if (!empty($institutes) && !in_array('All', $institutes)) {
+    // Convert abbreviations to LIKE patterns for partial matching
+    $patterns = [];
+    foreach ($institutes as $institute) {
+      switch ($institute) {
+        case 'IC':
+          $patterns[] = "u.institute LIKE '%IC%'";
+          break;
+        case 'ILEGG':
+          $patterns[] = "u.institute LIKE '%ILEGG%'";
+          break;
+        case 'ITed':
+          $patterns[] = "u.institute LIKE '%ITed%'";
+          break;
+        case 'IAAS':
+          $patterns[] = "u.institute LIKE '%IAAS%'";
+          break;
+        default:
+          // For full institute names (in case they're used)
+          $patterns[] = "u.institute = ?";
+      }
+    }
+
+    
+    // Join patterns with OR
+    if (!empty($patterns)) {
+      $baseQuery .= " AND (" . implode(' OR ', $patterns) . ")";
+    }
+  }
 
   // Add sorting logic
   switch ($sortOption) {
     case 'old':
-      $query .= " ORDER BY a.created_at ASC";
+      $baseQuery .= " ORDER BY a.created_at ASC";
       break;
     case 'popular':
-    case 'hottest':
-      $query .= " ORDER BY likes DESC";
+      $baseQuery .= " ORDER BY likes DESC";
       break;
     case 'new':
     default:
-      $query .= " ORDER BY a.created_at DESC";
+      $baseQuery .= " ORDER BY a.created_at DESC";
       break;
   }
 
-  $stmt = $pdo->prepare($query);
-  $stmt->execute($institutes);
+  $stmt = $pdo->prepare($baseQuery);
+  $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+
+  // Bind institute parameters if needed (only for full institute names)
+  $paramIndex = 1;
+  if (!empty($institutes) && !in_array('All', $institutes)) {
+    foreach ($institutes as $institute) {
+      if (!in_array($institute, ['IC', 'ILEGG', 'ITed', 'IAAS'])) {
+        $stmt->bindValue($paramIndex++, $institute);
+      }
+    }
+  }
+
+  $stmt->execute();
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
