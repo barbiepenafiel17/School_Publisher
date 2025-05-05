@@ -197,8 +197,19 @@ function renderArticle(article) {
     // Build article HTML
     let html = `
     <div class="post-card" data-article-id="${article.id}">
-      <div class="dropdown" style="display: inline-block; position: relative;">
-        <div class="dropdown-content" style="display: none; position: absolute; top: 0; left: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">`;
+      
+
+  <div class="post-card-header">
+    <div class="post-header">
+      <img class="avatar" src="uploads/profile_pictures/${escapeHtml(article.profile_picture)}" alt="User">
+      <div>
+        <strong>${escapeHtml(article.full_name)}</strong><br>
+        <span class="post-date">${formattedDate}</span>
+      </div>
+    </div>
+    <div class="dropdown" style="display: inline-block; position: relative;">
+      <button class="dot-btn" onclick="toggleDropdown(this)">...</button>
+        <div class="dropdown-content" style="display: none; position: absolute; top: 0; right: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">`;
 
     if (article.is_owner) {
         html += `
@@ -219,16 +230,6 @@ function renderArticle(article) {
       </form>
     </div>
   </div>
-
-  <div class="post-card-header">
-    <div class="post-header">
-      <img class="avatar" src="uploads/profile_pictures/${escapeHtml(article.profile_picture)}" alt="User">
-      <div>
-        <strong>${escapeHtml(article.full_name)}</strong><br>
-        <span class="post-date">${formattedDate}</span>
-      </div>
-    </div>
-    <button class="dot-btn" onclick="toggleDropdown(this)">...</button>
   </div>
 
   <div class="post-title"><strong>${escapeHtml(article.title)}</strong></div>

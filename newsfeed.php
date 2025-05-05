@@ -162,34 +162,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                         <?php foreach ($articles as $row): ?>
                             <?php $articleId = $row['id']; ?>
                             <div class="post-card" data-article-id="<?= $articleId ?>">
-                                <div class="dropdown" style="display: inline-block; position: relative;">
 
-                                    <div class="dropdown-content"
-                                        style="display: none; position: absolute; top: 0; left: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">
-                                        <!-- Delete -->
-                                        <form method="POST" action="delete_article.php"
-                                            onsubmit="return confirm('Delete this article?');">
-                                            <input type="hidden" name="article_id" value="<?= $articleId ?>">
-                                            <button type="submit"
-                                                style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;">Delete</button>
-                                        </form>
-
-                                        <!-- Hide -->
-                                        <form method="POST" action="hide_article.php">
-                                            <input type="hidden" name="article_id" value="<?= $articleId ?>">
-                                            <button type="submit"
-                                                style="background: none; border: none; padding: 10px; width: 100%; text-align: left;">Hide</button>
-                                        </form>
-
-                                        <!-- Report -->
-                                        <form method="POST" action="report_article.php"
-                                            onsubmit="return confirm('Report this article to admin?');">
-                                            <input type="hidden" name="article_id" value="<?= $articleId ?>">
-                                            <button type="submit"
-                                                style="background: none; border: none; padding: 10px; width: 100%; text-align: left;">Report</button>
-                                        </form>
-                                    </div>
-                                </div>
 
                                 <div class="post-card-header">
                                     <div class="post-header">
@@ -202,7 +175,34 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 class="post-date"><?= date("F j, Y | g:i A", strtotime($row['created_at'])) ?></span>
                                         </div>
                                     </div>
-                                    <button class="dot-btn" onclick="toggleDropdown(this)">...</button>
+                                    <div class="dropdown" style="display: inline-block; position: relative;">
+                                        <button class="dot-btn" onclick="toggleDropdown(this)">...</button>
+                                        <div class="dropdown-content"
+                                            style="display: none; position: absolute; top: 0; right: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">
+                                            <!-- Delete -->
+                                            <form method="POST" action="delete_article.php"
+                                                onsubmit="return confirm('Delete this article?');">
+                                                <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                <button type="submit"
+                                                    style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;">Delete</button>
+                                            </form>
+
+                                            <!-- Hide -->
+                                            <form method="POST" action="hide_article.php">
+                                                <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                <button type="submit"
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;">Hide</button>
+                                            </form>
+
+                                            <!-- Report -->
+                                            <form method="POST" action="report_article.php"
+                                                onsubmit="return confirm('Report this article to admin?');">
+                                                <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                <button type="submit"
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;">Report</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="post-title"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
