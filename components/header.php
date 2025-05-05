@@ -18,7 +18,7 @@ $unreadNotifications = $unreadNotifications ?? [];
   </div>
   <nav class="nav-links">
     <a href="newsfeed.php">Home</a>
-    <a href="#">Latest</a>
+    <!-- <a href="#">Latest</a> -->
     <a href="aboutus.php">About</a>
     <a href="contactus.php">Contact</a>
   </nav>
@@ -52,7 +52,7 @@ $unreadNotifications = $unreadNotifications ?? [];
         <?php echo htmlspecialchars($full_name ?? ''); ?> &#x25BC;
       </button>
       <div id="user-menu" class="dropdown-content">
-        <a href="profile.php">Profile</a>
+        <!-- <a href="profile.php">Profile</a> -->
         <a href="logout.php">Logout</a>
       </div>
     </div>

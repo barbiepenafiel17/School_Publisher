@@ -56,78 +56,12 @@ $articles = $articleStmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<header class="navbar">
-    <div class="logo">
-        <img src="FinalLogo.jpg" alt="DBCLM Logo">
-    </div>
-    <nav class="nav-links">
-        <a href="newsfeed.php">Home</a>
-        <a href="#">Latest</a>
-        <a href="aboutus.php">About</a>
-        <a href="contactus.php">Contact</a>
-    </nav>
-    <div class="navbar-right">
-<?php
-// ✅ Start session only if it's not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-$user_id = $_SESSION['user_id'];
-
-$conn = new mysqli("localhost", "root", "", "dbclm_college");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch unread notifications
-// Fetch only the latest unread notification
-$notifQuery = "SELECT * FROM notifications WHERE user_id = ? AND is_read = 0 ORDER BY created_at DESC LIMIT 1";
-$notifStmt = $conn->prepare($notifQuery);
-$notifStmt->bind_param("i", $user_id);
-$notifStmt->execute();
-$notifResult = $notifStmt->get_result();
-$notifCount = $notifResult->num_rows;
-$profile_picture = !empty($profile_picture) ? '' . htmlspecialchars($profile_picture) : 'default-profile.png';
-?>
-
-<div class="notification-wrapper" style="position: relative;">
-    <img src="bell.jpg" alt="Notifications" class="icon-bell" id="notif-bell" style="cursor:pointer;">
-
-    <?php if ($notifCount > 0): ?>
-    <span class="notif-badge"> <?php echo $notifCount; ?> </span>
-<?php endif; ?>
-
-<div class="notif-dropdown" id="notif-dropdown" style="display:none;">
-    <?php
-    if ($notifCount > 0) {
-        foreach ($unreadNotifications as $notif) {
-            echo '<div class="notif-item">' .
-                    htmlspecialchars($notif['message']) .
-                    '<br><small>' . date('M d, Y H:i', strtotime($notif['created_at'])) . '</small>' .
-                 '</div>';
-        }
-    } else {
-        echo '<div class="notif-item">No new notifications</div>';
-    }
-    ?>
-</div>
-
-    </div>
-</div>
-<?php $notifStmt->close(); ?>
-
-        <span class="user-label"><?php echo htmlspecialchars($full_name); ?></span>
-    </div>
-</header>
+<header class="header">
+            <?php require_once 'components/header.php'; ?>
+        </header>
 
   <div class="contact-section">
-    <a href="contact_form.php" class="contact-button">Contact Us</a>
+    <a href="contactus.php" class="contact-button">Contact Us</a>
     <h1 class="contact-title">Get in Touch</h1>
     <p class="contact-subtext">Have questions or need more information? We’re here to help.</p>
     <p class="contact-subtext">Reach out to our team for assistance.</p>

@@ -21,7 +21,7 @@ try {
 
     if ($stmt->rowCount() > 0) {
         $article = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($article['user_id'] === $user_id || $user_role === 'admin') {
+        if ($article['user_id'] == $user_id || $user_role == 'admin') {
             // Soft delete: set status to 'DELETED'
             $update_stmt = $pdo->prepare("UPDATE articles SET status = 'DELETED' WHERE id = ?");
             $update_stmt->execute([$article_id]);
