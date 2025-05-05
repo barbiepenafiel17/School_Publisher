@@ -80,6 +80,10 @@ if (empty($full_name)) {
                         <img src="finalsave.png" alt="Saved">
                         <span>Saved Articles</span>
                     </li>
+                    <li>
+                    <img src="secret-file.png" alt="Saved">
+                    <span>Hide Articles</span>
+                    </li>
                 </ul>
             </div>
         </aside>
