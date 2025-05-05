@@ -1,0 +1,229 @@
+/* Global Styles for Article Publisher 
+   Shared across the entire site */
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main Layout Structure */
+.page-container {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+/* Layout Grid Structure */
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: 350px 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* Grid Areas */
+.header {
+  grid-area: header;
+  background-color: #f4f4f4;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  padding: 12px;
+  height: fit-content;
+  position: static;
+  top: 5rem;
+}
+
+.main-content {
+  grid-area: main;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer {
+  grid-area: footer;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+/* Common Component Styles */
+.card,
+.card1 {
+  background-color: white;
+  border: 1px solid #a5b4fc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+/* Avatar Styles */
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Common Utility Styles */
+.hidden {
+  display: none;
+}
+
+/* Button Styles */
+.publish-btn {
+  background: white;
+  color: #1d4ed8;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: lighter;
+  border: 1px solid #1d4ed8;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.publish-btn:hover {
+  background: #1d4ed8;
+  color: white;
+}
+
+.submit-btn {
+  background: #1d4ed8;
+  color: white;
+  border: none;
+}
+
+.submit-btn:hover {
+  background: #1e40af;
+}
+
+.select-button {
+  background: #1d4ed8;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.select-button:hover {
+  background: #1e40af;
+}
+
+/* Footer Styling */
+.site-footer {
+  background-color: #05055c;
+  color: white;
+  padding: 40px 20px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.footer-about,
+.footer-links {
+  flex: 1 1 200px;
+}
+
+.footer-links h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.footer-bottom {
+  margin-top: 30px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* Responsive Adjustments - Global */
+@media (max-width: 1200px) {
+  .page-container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "main"
+      "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+  }
+
+  .main-content {
+    margin-left: 0;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    padding: 8px;
+  }
+
+  .sidebar {
+    padding: 8px;
+  }
+
+  .main-content {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 0.5rem;
+  }
+
+  .card,
+  .card1 {
+    padding: 1rem;
+  }
+}

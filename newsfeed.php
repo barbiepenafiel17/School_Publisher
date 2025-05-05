@@ -45,6 +45,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
 <head>
     <meta charset="UTF-8">
     <title>DBCLM College</title>
+    <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="newsfeed.css">
 </head>
 
@@ -264,14 +265,16 @@ $latest_announcements = getLatestAnnouncements($pdo);
             <!-- Post Feeds -->
         </main>
 
+        <footer class="footer">
+            <?php require_once 'components/footer.php'; ?>
+        </footer>
     </div>
 
 
-    <footer class="footer">
-        <?php require_once 'components/footer.php'; ?>
-    </footer>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/newsfeed.js"></script>
+    <script src="js/database_helper.js"></script>
 
 </body>
 

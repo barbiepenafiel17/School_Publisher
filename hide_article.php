@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require 'db_connect.php';
 
@@ -11,22 +11,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['article_id']) && isse
 
     if (!$stmt) {
         // Handle prepare error
-        die("Database error: " . $conn->error);
+        die("Database error: {$conn->error}");
     }
 
     $stmt->bind_param("ii", $userId, $articleId);
 
     if ($stmt->execute()) {
+        // Close the statement before redirecting
+        $stmt->close();
         header("Location: newsfeed.php");
         exit;
     } else {
         // Handle execute error
-        die("Error hiding article: " . $stmt->error);
+        $stmt->close();
+        die("Error hiding article: {$stmt->error}");
     }
-
-    $stmt->close();
 } else {
     // Invalid request
     die("Invalid request.");
 }
-?>

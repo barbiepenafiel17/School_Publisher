@@ -1,0 +1,152 @@
+/* Header/Navigation Styles */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.logo img {
+  height: 3.125rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.25rem;
+  margin-left: 2.5rem;
+}
+
+.nav-links a,
+.navbar-right a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.navbar-right a:hover {
+  color: #1d4ed8;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.icon-bell {
+  width: 1.875rem;
+  height: 1.875rem;
+  cursor: pointer;
+}
+
+.user-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #333;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+}
+
+/* Notification styles */
+.notification-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 30px;
+  background: white;
+  border: 1px solid #ccc;
+  width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.notif-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+/* User dropdown menu */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+  border: none;
+  background: none;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: black;
+}
+
+/* Responsive styles for header */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  .nav-links {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .navbar-right {
+    margin-top: 0.5rem;
+  }
+
+  .notif-dropdown {
+    width: 100%;
+    right: 0;
+    top: 100%;
+  }
+}
