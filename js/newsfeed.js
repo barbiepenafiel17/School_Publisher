@@ -128,6 +128,62 @@ let currentFilters = {
     sort: 'new'
 };
 
+// Improved event listeners for institute filter checkboxes
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle "All" checkbox special behavior
+    const allInstitutesCheckbox = document.querySelector('.institute-filter[value="All"]');
+    const otherInstitutesCheckboxes = document.querySelectorAll('.institute-filter:not([value="All"])');
+    
+    // When "All" is checked, uncheck others
+    allInstitutesCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            otherInstitutesCheckboxes.forEach(cb => cb.checked = false);
+            currentFilters.institutes = ['All'];
+            applyFilters();
+        } else {
+            // If "All" is unchecked and no other option is selected, check it again
+            const anyChecked = Array.from(otherInstitutesCheckboxes).some(cb => cb.checked);
+            if (!anyChecked) {
+                this.checked = true;
+                currentFilters.institutes = ['All'];
+            }
+        }
+    });
+
+    // When other checkboxes are checked
+    otherInstitutesCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // If any other checkbox is checked, uncheck "All"
+            if (this.checked) {
+                allInstitutesCheckbox.checked = false;
+            }
+            
+            // Get all checked institute values
+            const checkedInstitutes = Array.from(
+                document.querySelectorAll('.institute-filter:checked')
+            ).map(cb => cb.value);
+            
+            // If none are checked, default to "All"
+            if (checkedInstitutes.length === 0) {
+                allInstitutesCheckbox.checked = true;
+                currentFilters.institutes = ['All'];
+            } else {
+                currentFilters.institutes = checkedInstitutes;
+            }
+            
+            applyFilters();
+        });
+    });
+
+    // Sort option event listeners
+    document.querySelectorAll('.sort-option').forEach(radio => {
+        radio.addEventListener('change', function() {
+            currentFilters.sort = this.value;
+            applyFilters();
+        });
+    });
+});
+
 // Function to apply both filters
 function applyFilters() {
     fetch('filter_feed.php', {
@@ -158,25 +214,6 @@ function applyFilters() {
             console.error("Error updating articles:", error);
         });
 }
-
-// Initialize event listeners when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    // Institute filter event listeners
-    document.querySelectorAll('.institute-filter').forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            currentFilters.institutes = Array.from(document.querySelectorAll('.institute-filter:checked')).map(cb => cb.value);
-            applyFilters();
-        });
-    });
-
-    // Sort option event listeners
-    document.querySelectorAll('.sort-option').forEach(radio => {
-        radio.addEventListener('change', () => {
-            currentFilters.sort = document.querySelector('.sort-option:checked').value;
-            applyFilters();
-        });
-    });
-});
 
 /**
  * Helper function to render a single article
@@ -342,4 +379,92 @@ function initArticleEvents() {
                 });
             });
     });
+
+    // Initialize comment form listeners
+    initCommentFormListeners();
 }
+
+/**
+ * Function to load comments for a specific article
+ * @param {string} articleId - The ID of the article
+ */
+function loadComments(articleId) {
+    fetch('get_comments.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `article_id=${articleId}`
+    })
+        .then(response => response.json())
+        .then(comments => {
+            const commentList = document.querySelector(`#comments-${articleId}`);
+            commentList.innerHTML = '';
+
+            if (comments.length === 0) {
+                commentList.innerHTML = '<p class="no-comments">No comments yet.</p>';
+                return;
+            }
+
+            comments.forEach(comment => {
+                let commentHtml = `
+        <div class="comment">
+          <div class="comment-text">
+            <strong>${escapeHtml(comment.commenter_name)}:</strong> 
+            ${escapeHtml(comment.comment_text)}
+          </div>`;
+
+                if (comment.reply_text) {
+                    commentHtml += `
+          <div class="reply-text">
+            <em>Owner replied:</em> ${escapeHtml(comment.reply_text)}
+          </div>`;
+                }
+
+                commentHtml += `</div>`;
+                commentList.innerHTML += commentHtml;
+            });
+        })
+        .catch(error => console.error('Error loading comments:', error));
+}
+
+/**
+ * Ensure no duplicate event listeners are attached
+ */
+function initCommentFormListeners() {
+    document.querySelectorAll('.comment-form').forEach(form => {
+        // Remove any existing event listeners
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+
+        newForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const articleId = this.querySelector('input[name="article_id"]').value;
+            const commentText = this.querySelector('input[name="comment_text"]').value;
+
+            if (commentText.trim() !== '') {
+                fetch('post_comment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `article_id=${articleId}&comment_text=${encodeURIComponent(commentText)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.querySelector('input[name="comment_text"]').value = '';
+                        loadComments(articleId); // Refresh comments
+                    } else {
+                        console.error('Error posting comment:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error posting comment:', error));
+            }
+        });
+    });
+}
+
+// Add this to the bottom of your newsfeed.php file or in a separate JS file
+document.addEventListener('DOMContentLoaded', function() {
+    initCommentFormListeners();
+});

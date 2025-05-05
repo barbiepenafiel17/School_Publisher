@@ -14,13 +14,14 @@ require_once 'helpers/db_helpers.php';
 // Function to get all available institutes for filtering
 function getAllInstitutes($pdo)
 {
+    // Make sure to select from the right column - using articles.institute
     $query = "SELECT DISTINCT institute FROM articles WHERE status = 'approved'";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
+    $stmt = $pdo->query($query);
     $institutes = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    // Always include "All" option
+    // Add 'All' at the beginning
     array_unshift($institutes, 'All');
+
     return $institutes;
 }
 
@@ -30,6 +31,10 @@ if (
     (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') ||
     (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
 ) {
+    // Start a session if not already started
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     // Get JSON data for AJAX request
     $json = file_get_contents('php://input');
@@ -39,13 +44,8 @@ if (
     $institutes = isset($data['institutes']) ? $data['institutes'] : ['All'];
     $sortOption = isset($data['sort']) ? $data['sort'] : 'new';
 
-    // Get filtered and sorted articles
+    // Get filtered and sorted articles - hidden articles will be automatically excluded
     $articles = getFilteredArticles($pdo, $institutes, $sortOption);
-
-    // Start a session if not already started
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
 
     // Add is_owner flag to each article
     foreach ($articles as &$article) {
