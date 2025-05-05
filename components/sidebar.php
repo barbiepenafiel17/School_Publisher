@@ -8,10 +8,6 @@
 <!-- Sidebar Navigation Card -->
 <div class="card sidebar-nav ">
   <ul>
-    <li class="active">
-      <img src="finalhome.png" alt="Home">
-      <span>Home</span>
-    </li>
     <li>
       <img src="finaluser.png" alt="Profile">
       <span><a href="profile.php" style="color: black;text-decoration: none;">My Profile</a></span>
@@ -46,7 +42,6 @@
     <li><input type="radio" name="sort" class="sort-option" value="new" checked> New Upload</li>
     <li><input type="radio" name="sort" class="sort-option" value="old"> Oldest Upload</li>
     <li><input type="radio" name="sort" class="sort-option" value="popular"> Popular</li>
-    <li><input type="radio" name="sort" class="sort-option" value="hottest"> Hottest</li>
   </ul>
 </div>
 

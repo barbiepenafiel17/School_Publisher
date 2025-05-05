@@ -72,10 +72,6 @@ if (empty($full_name)) {
         <aside class="sidebar">
             <div>
                 <ul>
-                    <li>
-                        <img src="finalhome.png" alt="Home">
-                        <span><a href="newsfeed.php" style="color: black;text-decoration: none;">Home</a></span>
-                    </li>
                     <li class="active">
                         <img src="finaluser.png" alt="Profile">
                         <span>My Profile</span>
