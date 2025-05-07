@@ -110,7 +110,7 @@ if (empty($full_name)) {
                 <div class="profile_header">
                     <h2>Profile</h2>
                 </div>
-
+                 
                 <div class="profile-picture-section">
                     <img src="<?= 'uploads/profile_pictures/' . htmlspecialchars($profile_picture); ?>"
                         alt="Profile Picture" class="p0">

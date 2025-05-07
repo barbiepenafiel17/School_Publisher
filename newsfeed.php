@@ -205,11 +205,13 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 <button type="submit"
                                                     style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-exclamation-triangle" style="margin-right:10px; color:yellow;" ></i>Report</button>
                                             </form>
-                                            <form method="POST" action="save_article.php">
+                                            <!-- Save -->
+                                            <form method="POST" action="save_A.php">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
                                                     style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
-                                            </form>
+                                            
+                                                </form>
                                         </div>
                                     </div>
                                 </div>

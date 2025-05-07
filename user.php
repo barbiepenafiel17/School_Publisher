@@ -130,10 +130,10 @@ $articles_result = $mysqli->query($articles_query);
           <td class="actions">
            
               <!-- Edit Button -->
-<form action="edit_article.php" method="POST" style="display:inline;">
+<!-- <form action="edit_article.php" method="POST" style="display:inline;">
   <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
   <button type="submit" class="accept-btn">Edit</button>
-</form>
+</form> -->
 
 <!-- Delete Button triggers modal -->
 <button type="button" onclick="openModal(<?= $row['id']; ?>)" class="reject-btn">Delete</button>
