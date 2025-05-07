@@ -14,8 +14,9 @@
     </li>
     <li>
       <img src="finalsave.png" alt="Saved">
-      <span>Saved Articles</span>
+      <span><a href="save_articles.php" style="color: black;text-decoration: none;">Saved Articles</span>
     </li>
+    
   </ul>
 
 </div>
@@ -28,9 +29,7 @@
     <li><input type="checkbox" class="institute-filter" value="IC"> Institute of Computing</li>
 
     <li><input type="checkbox" class="institute-filter" value="ILEGG"> Institute of Leadership Entrepreneurship, and
-      Good
-
-      Governance</li>
+      Good Governance</li>
     <li><input type="checkbox" class="institute-filter" value="ITed"> Institute of Teacher
       Education</li>
     <li><input type="checkbox" class="institute-filter" value="IAAS"> Institute of
