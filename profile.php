@@ -74,15 +74,15 @@ if (empty($full_name)) {
                 <ul>
                     <li class="active">
                         <img src="finaluser.png" alt="Profile">
-                        <span>My Profile</span>
+                        <span><a href="profile.php" style="text-decoration: none; color:black">My Profile</a></span>
                     </li>
                     <li>
                         <img src="finalsave.png" alt="Saved">
-                        <span>Saved Articles</span>
+                        <span><a href="save_articles.php" style="text-decoration: none; color:black">Saved Articles</a></span>
                     </li>
                     <li>
                     <img src="secret-file.png" alt="Saved">
-                    <span>Hide Articles</span>
+                    <span><a href="hide.php" style="text-decoration: none; color:black">Hide Articles</a></span>
                     </li>
                 </ul>
             </div>

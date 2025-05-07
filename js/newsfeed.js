@@ -197,7 +197,7 @@ function applyFilters() {
             const postFeed = document.querySelector('#postFeed');
             postFeed.innerHTML = '';
 
-            if (articles.length === 0) {
+            if (articles.length == 0) {
                 postFeed.innerHTML = '<p>No articles found matching your criteria.</p>';
                 return;
             }

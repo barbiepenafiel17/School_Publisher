@@ -1,32 +1,50 @@
 <?php
+include 'db_connect.php';
 session_start();
-require 'db_connect.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['article_id']) && isset($_SESSION['user_id'])) {
-    $articleId = intval($_POST['article_id']);
-    $userId = intval($_SESSION['user_id']);
-
-    // Prepare statement
-    $stmt = $conn->prepare("INSERT IGNORE INTO hidden_articles (user_id, article_id) VALUES (?, ?)");
-
-    if (!$stmt) {
-        // Handle prepare error
-        die("Database error: {$conn->error}");
-    }
-
-    $stmt->bind_param("ii", $userId, $articleId);
-
-    if ($stmt->execute()) {
-        // Close the statement before redirecting
-        $stmt->close();
-        header("Location: newsfeed.php");
-        exit;
-    } else {
-        // Handle execute error
-        $stmt->close();
-        die("Error hiding article: {$stmt->error}");
-    }
-} else {
-    // Invalid request
-    die("Invalid request.");
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
+
+$user_id = $_SESSION['user_id'];
+
+// Check if the article ID is provided
+if (!isset($_POST['article_id']) || !is_numeric($_POST['article_id'])) {
+    header("Location: hide.php?status=error");
+    exit();
+}
+
+$article_id = $_POST['article_id'];
+
+// Check if the article is already hidden
+$query = "SELECT * FROM hidden_articles WHERE user_id = ? AND article_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii", $user_id, $article_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    // Article is already hidden
+    header("Location: hide.php?status=already_hidden");
+    exit();
+}
+
+// Hide the article
+$insert_query = "INSERT INTO hidden_articles (user_id, article_id) VALUES (?, ?)";
+$insert_stmt = $conn->prepare($insert_query);
+$insert_stmt->bind_param("ii", $user_id, $article_id);
+
+if ($insert_stmt->execute()) {
+    // Redirect back with success message
+    header("Location: hide.php?status=hidden");
+} else {
+    // Redirect back with error message
+    header("Location: hide.php?status=error");
+}
+
+$insert_stmt->close();
+$stmt->close();
+$conn->close();
+?>

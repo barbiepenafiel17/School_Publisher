@@ -14,7 +14,7 @@
     </li>
     <li>
       <img src="finalsave.png" alt="Saved">
-      <span><a href="save_articles.php" style="color: black;text-decoration: none;">Saved Articles</span>
+      <span><a href="save_articles.php" style="color: black;text-decoration: none;">Saved Articles</a></span>
     </li>
     
   </ul>

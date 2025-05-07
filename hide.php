@@ -45,11 +45,11 @@ if (empty($full_name)) {
 $query = "SELECT a.*, u.full_name, u.profile_picture, 
          (SELECT COUNT(*) FROM reactions WHERE article_id = a.id) as likes,
          (SELECT COUNT(*) FROM comments WHERE article_id = a.id) as comments
-         FROM saved_articles sa
-         JOIN articles a ON sa.article_id = a.id
+         FROM hidden_articles ha
+         JOIN articles a ON ha.article_id = a.id
          JOIN users u ON a.user_id = u.id
-         WHERE sa.user_id = ?
-         ORDER BY sa.saved_at DESC";
+         WHERE ha.user_id = ?
+         ORDER BY ha.hidden_at DESC";
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
@@ -58,18 +58,9 @@ $result = $stmt->get_result();
 $articles = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-?>
-<?php if (isset($_GET['update']) && $_GET['update'] == 'success'): ?>
-    <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-        Profile updated successfully!
-    </div>
-    <?php if (isset($_GET['update']) && $_GET['update'] == 'error_empty'): ?>
-        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-            Name and Email cannot be empty. Please fill out all fields.
-        </div>
-    <?php endif; ?>
 
-<?php endif; ?>
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,11 +86,11 @@ $stmt->close();
                         <img src="finaluser.png" alt="Profile">
                         <span><a href="profile.php" style="text-decoration: none; color:black">My Profile</a></span>
                     </li>
-                    <li class="active">
+                    <li>
                         <img src="finalsave.png" alt="Saved">
                         <span><a href="save_articles.php" style="text-decoration: none; color:black">Saved Articles</a></span>
                     </li>
-                    <li>
+                    <li class="active">
                     <img src="secret-file.png" alt="Saved">
                     <span><a href="hide.php" style="text-decoration: none; color:black">Hide Articles</a></span>
                     </li>
@@ -127,6 +118,22 @@ $stmt->close();
 
                                 <div class="post-card-header">
                                     <div class="post-header" >
+                                    <div class="post-actions">
+    <?php if (!in_array($articleId, $hidden_article_ids)): ?>
+        <!-- Hide Button -->
+        <form method="POST" action="hide_article.php">
+            <input type="hidden" name="article_id" value="<?= $articleId ?>">
+            <button type="submit" class="hide-article-btn">Hide</button>
+        </form>
+    <?php else: ?>
+        <!-- Unhide Button -->
+        <form method="POST" action="unhide_article.php">
+            <input type="hidden" name="article_id" value="<?= $articleId ?>">
+            <button type="submit" class="unhide-article-btn">Unhide</button>
+        </form>
+    <?php endif; ?>
+</div>
+
                                         <img class="avatar"
                                             src="uploads/profile_pictures/<?= htmlspecialchars($row['profile_picture']) ?>"
                                             alt="User">
