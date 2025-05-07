@@ -41,6 +41,9 @@ if (empty($full_name)) {
     exit();
 }
 
+// Initialize an array to store the IDs of hidden articles
+$hidden_article_ids = [];
+
 // Fetch saved articles for the current user
 $query = "SELECT a.*, u.full_name, u.profile_picture, 
          (SELECT COUNT(*) FROM reactions WHERE article_id = a.id) as likes,
@@ -48,8 +51,7 @@ $query = "SELECT a.*, u.full_name, u.profile_picture,
          FROM hidden_articles ha
          JOIN articles a ON ha.article_id = a.id
          JOIN users u ON a.user_id = u.id
-         WHERE ha.user_id = ?
-         ORDER BY ha.hidden_at DESC";
+         WHERE ha.user_id = ? ";
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
@@ -57,6 +59,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 $articles = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
+
+// Populate the hidden_article_ids array
+foreach ($articles as $article) {
+    $hidden_article_ids[] = $article['id'];
+}
 
 
 ?>
@@ -88,11 +95,12 @@ $stmt->close();
                     </li>
                     <li>
                         <img src="finalsave.png" alt="Saved">
-                        <span><a href="save_articles.php" style="text-decoration: none; color:black">Saved Articles</a></span>
+                        <span><a href="save_articles.php" style="text-decoration: none; color:black">Saved
+                                Articles</a></span>
                     </li>
                     <li class="active">
-                    <img src="secret-file.png" alt="Saved">
-                    <span><a href="hide.php" style="text-decoration: none; color:black">Hide Articles</a></span>
+                        <img src="secret-file.png" alt="Saved">
+                        <span><a href="hide.php" style="text-decoration: none; color:black">Hide Articles</a></span>
                     </li>
                 </ul>
             </div>
@@ -106,33 +114,25 @@ $stmt->close();
                         <?php foreach ($articles as $row): ?>
                             <?php $articleId = $row['id']; ?>
                             <div class="post-card" data-article-id="<?= $articleId ?>">
-                                <?php if (isset($_GET['status'])): ?>
-                                    <?php if ($_GET['status'] == 'saved'): ?>
-                                        <div class="alert success">Article saved successfully!</div>
-                                    <?php elseif ($_GET['status'] == 'already_saved'): ?>
-                                        <div class="alert warning">You have already saved this article.</div>
-                                    <?php elseif ($_GET['status'] == 'error'): ?>
-                                        <div class="alert error">An error occurred while saving the article. Please try again.</div>
-                                    <?php endif; ?>
-                                <?php endif; ?>
+
 
                                 <div class="post-card-header">
-                                    <div class="post-header" >
-                                    <div class="post-actions">
-    <?php if (!in_array($articleId, $hidden_article_ids)): ?>
-        <!-- Hide Button -->
-        <form method="POST" action="hide_article.php">
-            <input type="hidden" name="article_id" value="<?= $articleId ?>">
-            <button type="submit" class="hide-article-btn">Hide</button>
-        </form>
-    <?php else: ?>
-        <!-- Unhide Button -->
-        <form method="POST" action="unhide_article.php">
-            <input type="hidden" name="article_id" value="<?= $articleId ?>">
-            <button type="submit" class="unhide-article-btn">Unhide</button>
-        </form>
-    <?php endif; ?>
-</div>
+                                    <div class="post-header">
+                                        <div class="post-actions">
+                                            <?php if (!in_array($articleId, $hidden_article_ids)): ?>
+                                                <!-- Hide Button -->
+                                                <form method="POST" action="hide_article.php">
+                                                    <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                    <button type="submit" class="hide-article-btn">Hide</button>
+                                                </form>
+                                            <?php else: ?>
+                                                <!-- Unhide Button -->
+                                                <form method="POST" action="unhide_article.php">
+                                                    <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                    <button type="submit" class="unhide-article-btn">Unhide</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
 
                                         <img class="avatar"
                                             src="uploads/profile_pictures/<?= htmlspecialchars($row['profile_picture']) ?>"
@@ -146,7 +146,9 @@ $stmt->close();
 
                                 </div>
 
-                                <div class="post-title" style="margin-top: 30px;"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
+                                <div class="post-title" style="margin-top: 30px;">
+                                    <strong><?= htmlspecialchars($row['title']) ?></strong>
+                                </div>
                                 <div class="post-content"><?= $row['abstract'] ?></div>
 
                                 <?php if (!empty($row['featured_image'])): ?>
@@ -157,7 +159,7 @@ $stmt->close();
                                 <?php endif; ?>
 
 
-                                
+
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
