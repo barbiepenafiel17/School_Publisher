@@ -100,7 +100,7 @@ $stmt->close();
 
         <main class="main-content">
             <div class="articles-container">
-                <h1>Saved Articles</h1>
+                <h1>Hide Articles</h1>
                 <div class="post-feed" id="postFeed">
                     <?php if (!empty($articles)): ?>
                         <?php foreach ($articles as $row): ?>
@@ -161,7 +161,7 @@ $stmt->close();
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p>No save articles available yet.</p>
+                        <p>No hide articles available yet.</p>
                     <?php endif; ?>
                 </div>
 
