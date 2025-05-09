@@ -25,6 +25,7 @@ if (!$user) {
     exit();
 }
 
+
 $full_name = htmlspecialchars($user['full_name']);
 $profile_picture = !empty($user['profile_picture']) ? 'uploads/profile_pictures/' . htmlspecialchars($user['profile_picture']) : 'uploads/profile_pictures/default_profile.png';
 

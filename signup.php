@@ -84,8 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="">Select Institute</option>
                     <option value="IC">Institute of Computing</option>
                     <option value="ITed">Institute of Teacher Education</option>
-                    <option value="ILEEG">Institute of Leadership, Entrepreneurship, and Good Governance</option>
-                    <option value="ITed">Institute of Aquatic and Applied Sciences</option>
+                    <option value="ILEGG">Institute of Leadership, Entrepreneurship, and Good Governance</option>
+                    <option value="IAAS">Institute of Aquatic and Applied Sciences</option>
                 </select>
                 <button type="submit">Create Account</button>
                 <p class="signin-link">Already have an account? <a href="login.php">Sign In</a></p>

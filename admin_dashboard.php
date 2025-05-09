@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'db.php';
 
 // Fetch article stats
@@ -28,6 +28,7 @@ $articles_result = $mysqli->query($articles_query);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,11 +36,12 @@ $articles_result = $mysqli->query($articles_query);
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="ad.css" rel="stylesheet">
 </head>
+
 <body>
   <div class="sidebar">
-  <h2>DBCLM COLLEGE</h2>
+    <h2>DBCLM COLLEGE</h2>
     <nav>
-    <h2>DASHBOARD</h2>
+      <h2>DASHBOARD</h2>
       <a href="admin_dashboard.php" class="active">ARTICLES</a>
       <a href="user.php">USER</a>
       <a href="announcement.php">ANOUNCEMENT</a>
@@ -56,18 +58,34 @@ $articles_result = $mysqli->query($articles_query);
     </div>
 
     <div class="stats">
-      <div class="stat-card"><p>Total Submission</p><h2><?= $stats['total'] ?></h2></div>
-      <div class="stat-card"><p>Pending Reviews</p><h2 id="pendingCount"><?= $stats['pending'] ?></h2></div>
-      <div class="stat-card"><p>Approved Articles</p><h2><?= $stats['approved'] ?></h2></div>
-      <div class="stat-card"><p>Rejected Articles</p><h2><?= $stats['rejected'] ?></h2></div>
+      <div class="stat-card">
+        <p>Total Submission</p>
+        <h2><?= $stats['total'] ?></h2>
+      </div>
+      <div class="stat-card">
+        <p>Pending Reviews</p>
+        <h2 id="pendingCount"><?= $stats['pending'] ?></h2>
+      </div>
+      <div class="stat-card">
+        <p>Approved Articles</p>
+        <h2><?= $stats['approved'] ?></h2>
+      </div>
+      <div class="stat-card">
+        <p>Rejected Articles</p>
+        <h2><?= $stats['rejected'] ?></h2>
+      </div>
     </div>
 
-    <div class="filters">
+    <!-- <div class="filters">
       <input type="text" placeholder="Search articles by title, author or content">
-      <select><option>All Institutes</option></select>
-      <select><option>All Status</option></select>
+      <select>
+        <option>All Institutes</option>
+      </select>
+      <select>
+        <option>All Status</option>
+      </select>
       <button>Apply Filter</button>
-    </div>
+    </div> -->
 
     <table>
       <thead>
@@ -82,18 +100,18 @@ $articles_result = $mysqli->query($articles_query);
       </thead>
       <tbody>
         <?php while ($row = $articles_result->fetch_assoc()): ?>
-        <tr>
-          <td><?= htmlspecialchars($row['title']) ?></td>
-          <td>
-            <?= htmlspecialchars($row['author_name']) ?><br>
-            <a href="mailto:<?= htmlspecialchars($row['author_email']) ?>"><?= htmlspecialchars($row['author_email']) ?></a>
-          </td>
-          <td><?= htmlspecialchars($row['author_institute']) ?></td>
-          <td><?= date('M j, Y', strtotime($row['created_at'])) ?></td>
-          <td>
-            <span class="status <?= strtolower($row['status']) ?>"><?= strtoupper($row['status']) ?></span>
-          </td>
-          <td class="actions">
+          <tr>
+            <td><?= htmlspecialchars($row['title']) ?></td>
+            <td>
+              <?= htmlspecialchars($row['author_name']) ?><br>
+              <a href="mailto:<?= htmlspecialchars($row['author_email']) ?>"><?= htmlspecialchars($row['author_email']) ?></a>
+            </td>
+            <td><?= htmlspecialchars($row['author_institute']) ?></td>
+            <td><?= date('M j, Y', strtotime($row['created_at'])) ?></td>
+            <td>
+              <span class="status <?= strtolower($row['status']) ?>"><?= strtoupper($row['status']) ?></span>
+            </td>
+            <td class="actions">
               <form action="approve_article.php" method="POST" style="display:inline;">
                 <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
                 <button type="submit" class="accept-btn">Approve</button>
@@ -102,9 +120,29 @@ $articles_result = $mysqli->query($articles_query);
                 <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
                 <button type="button" onclick="openModal(<?= $row['id']; ?>)" class="reject-btn">Reject</button>
               </form>
-              <button class="view-btn">View</button>
-          </td>
-        </tr>
+              <!-- <form action="view.php" method="POST" style="display:inline;">
+                <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
+                <button type="button" onclick="openViewModal(<?= $row['id']; ?>)" class="view-btn">View</button>
+                <div id="viewModal" class="modal" style="display:none;">
+                  <div class="modal-content">
+                    <span onclick="closeViewModal()" class="close">&times;</span>
+                    <h2>Article Details</h2>
+                    <div id="articleDetails">
+                      <div class="post-title"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
+                      <div class="post-content"><?= htmlspecialchars($row['abstract']) ?></div>
+
+                      <?php if (!empty($row['featured_image'])): ?>
+                        <div class="post-image">
+                          <img src="<?= htmlspecialchars($row['featured_image']) ?>" alt="Article Image"
+                            class="responsive-img">
+                        </div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                </div>
+              </form> -->
+            </td>
+          </tr>
         <?php endwhile; ?>
       </tbody>
     </table>
@@ -135,6 +173,45 @@ $articles_result = $mysqli->query($articles_query);
       const modal = document.getElementById('rejectModal');
       modal.style.display = 'none';
     }
+
+    function openViewModal(articleId) {
+      const modal = document.getElementById('viewModal');
+      const articleDetails = document.getElementById('articleDetails');
+
+      // Clear previous content
+      articleDetails.innerHTML = '<p>Loading...</p>';
+
+      // Fetch article details via AJAX
+      fetch(`view_article.php?article_id=${articleId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            articleDetails.innerHTML = `
+                    <h3>${data.article.title}</h3>
+                    <p><strong>Author:</strong> ${data.article.author_name}</p>
+                    <p><strong>Institute:</strong> ${data.article.author_institute}</p>
+                    <p><strong>Content:</strong></p>
+                    <p>${data.article.content}</p>
+                `;
+          } else {
+            articleDetails.innerHTML = '<p>Error loading article details.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching article details:', error);
+          articleDetails.innerHTML = '<p>Error loading article details.</p>';
+        });
+
+      modal.style.display = 'block';
+    }
+
+    function closeViewModal() {
+      const modal = document.getElementById('viewModal');
+      modal.style.display = 'none';
+    }
   </script>
+  <script src="js/newsfeed.js"></script>
+  <script src="js/database_helper.js"></script>
 </body>
+
 </html>

@@ -127,7 +127,7 @@ foreach ($articles as $article) {
                                                 </form>
                                             <?php else: ?>
                                                 <!-- Unhide Button -->
-                                                <form method="POST" action="unhide_article.php">
+                                                <form method="POST" action="unhide_article.php" style="margin-left: 1060px; margin-bottom: -20px; font-size: 12px;">
                                                     <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                     <button type="submit" class="unhide-article-btn">Unhide</button>
                                                 </form>

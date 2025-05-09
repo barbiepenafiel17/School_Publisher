@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ).map(cb => cb.value);
             
             // If none are checked, default to "All"
-            if (checkedInstitutes.length === 0) {
+            if (checkedInstitutes.length == 0) {
                 allInstitutesCheckbox.checked = true;
                 currentFilters.institutes = ['All'];
             } else {

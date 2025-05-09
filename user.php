@@ -66,7 +66,6 @@ $articles_result = $mysqli->query($articles_query);
   <div class="content">
     <div class="topbar">
       <h1>Article Management Dashboard</h1>
-      <div><strong>LP</strong></div>
     </div>
 
     <div class="stats"> 
@@ -88,12 +87,12 @@ $articles_result = $mysqli->query($articles_query);
   </div>
 </div>
 
-    <div class="filters">
+    <!-- <div class="filters">
       <input type="text" placeholder="Search articles by title, author or content">
       <select><option>All Institutes</option></select>
       <select><option>All Status</option></select>
       <button>Apply Filter</button>
-    </div>
+    </div> -->
 
     <table>
       <thead>
@@ -140,10 +139,27 @@ $articles_result = $mysqli->query($articles_query);
 
 
 <!-- View Button -->
-<form action="view_article.php" method="GET" style="display:inline;">
-  <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
-  <button type="submit" class="view-btn">View</button>
-</form>
+<!-- <form action="view.php" method="POST" style="display:inline;">
+                <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
+                <button type="button" onclick="openViewModal(<?= $row['id']; ?>)" class="view-btn">View</button>
+                <div id="viewModal" class="modal" style="display:none;">
+                  <div class="modal-content">
+                    <span onclick="closeViewModal()" class="close">&times;</span>
+                    <h2>Article Details</h2>
+                    <div id="articleDetails">
+                      <div class="post-title"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
+                      <div class="post-content"><?= htmlspecialchars($row['abstract']) ?></div>
+
+                      <?php if (!empty($row['featured_image'])): ?>
+                        <div class="post-image">
+                          <img src="<?= htmlspecialchars($row['featured_image']) ?>" alt="Article Image"
+                            class="responsive-img">
+                        </div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                </div>
+              </form> -->
 
               
             
