@@ -4,44 +4,6 @@ include('includes/navbar.php');
 include('includes/db.php');
 include('includes/scripts.php'); 
 
-// Assuming you've already connected to the database
-$mysqli = new mysqli("localhost", "username", "password", "dbclm_college");
-
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
-
-// Admin user details
-$admin_name = 'Admin User';
-$admin_email = 'admin@dbclm.com';
-$admin_password = 'admin123';  // Replace with a secure password
-$admin_role = 'admin';  // Admin role
-$admin_password_hashed = password_hash($admin_password, PASSWORD_DEFAULT);  // Securely hash the password
-
-// SQL query to insert the admin user
-$sql = "INSERT INTO users (full_name, email, password, role, created_at) 
-        VALUES (?, ?, ?, ?, NOW())";
-
-// Prepare and execute the SQL query
-if ($stmt = $mysqli->prepare($sql)) {
-    $stmt->bind_param("ssss", $admin_name, $admin_email, $admin_password_hashed, $admin_role);
-    
-    if ($stmt->execute()) {
-        echo "Admin user has been successfully added.";
-    } else {
-        echo "Error: Could not add the admin user.";
-    }
-
-    $stmt->close();
-} else {
-    echo "Error: Could not prepare SQL query.";
-}
-
-// Close the database connection
-$mysqli->close();
-
-
-
 $stats_query = "
     SELECT 
         COUNT(*) AS total, 
@@ -259,7 +221,7 @@ $articles_result = $mysqli->query($articles_query);
                             Activity Log
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <a class="dropdown-item" href="logout.php" >
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>

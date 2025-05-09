@@ -174,3 +174,17 @@ function getCommentsForArticle(PDO $pdo, int $articleId)
   $stmt->execute(['article_id' => $articleId]);
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+function getPaginatedArticles($pdo, $offset, $limit) {
+  $stmt = $pdo->prepare("
+      SELECT a.*, u.full_name, u.profile_picture 
+      FROM articles a 
+      JOIN users u ON a.user_id = u.id 
+      WHERE a.is_approved = 1 
+      ORDER BY a.created_at DESC 
+      LIMIT :limit OFFSET :offset
+  ");
+  $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+  $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+  $stmt->execute();
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

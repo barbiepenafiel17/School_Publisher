@@ -215,8 +215,8 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                     </div>
                                 </div>
 
-                                <div class="post-title"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
-                                <div class="post-content"><?= htmlspecialchars($row['abstract']) ?></div>
+                                <div class="post-title" style="font-family: Poppins; font-size:40px"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
+                                <div class="post-content" style="font-family: Poppins; font-size:20px; text-align:justify"><?= htmlspecialchars($row['abstract']) ?></div>
 
                                 <?php if (!empty($row['featured_image'])): ?>
                                     <div class="post-image">

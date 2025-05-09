@@ -1,6 +1,9 @@
 <?php 
 include 'db_connect.php';
-session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Admin credentials (use secure storage in production)
 $admin_email = "admin@dblcmcollege.com";
@@ -17,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["role"] = "Admin";
         $_SESSION["email"] = $email;
         $_SESSION["full_name"] = "Administrator";
-        echo "<script>alert('Logged in as Admin!'); window.location.href='admin_dashboard.php';</script>";
+        echo "<script>alert('Logged in as Admin!'); window.location.href='admin_dashboards/index.php';</script>";
         exit();
     }
     $query = "SELECT id, full_name, email, profile_picture FROM users WHERE email = ?";
