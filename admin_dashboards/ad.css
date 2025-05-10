@@ -96,6 +96,10 @@ body {
     color: black;
   }
   
+  .view-btn:hover {
+    background-color: #d6d6d6;
+  }
+  
   #rejectModal {
     position: fixed;
     top: 50%;
@@ -120,6 +124,7 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
     display: none;
   }
+  
   
   .modal-content {
     background-color: #fefefe;

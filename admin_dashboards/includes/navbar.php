@@ -30,8 +30,13 @@
 </li>
 <!-- Divider -->
 <hr class="sidebar-divider">
-
-
+<li class="nav-item active">
+    <a class="nav-link" href="announcement.php">
+    <i class="fa fa-bullhorn" style="font-size:24px; color:white"></i>
+        <span>Announcement</span></a>
+</li>
+<hr class="sidebar-divider">
+<!-- fas fa-cogs -->
 </ul>
 <!-- End of Sidebar -->
 

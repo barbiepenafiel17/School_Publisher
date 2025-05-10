@@ -186,16 +186,9 @@ if ($users_result && $users_result->num_rows > 0) {
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Settings
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Activity Log
-                        </a>
+
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="logout.php">
+                        <a class="dropdown-item" href="/../logout.php">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>
@@ -231,7 +224,7 @@ if ($users_result && $users_result->num_rows > 0) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    <i class="fa fa-users fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -251,7 +244,7 @@ if ($users_result && $users_result->num_rows > 0) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -275,7 +268,7 @@ if ($users_result && $users_result->num_rows > 0) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    <i class="fas fa-id-card fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +288,7 @@ if ($users_result && $users_result->num_rows > 0) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    <i class="fa fa-user-plus fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -327,14 +320,14 @@ if ($users_result && $users_result->num_rows > 0) {
                                     </span>
                                 </td>
 
-                                <td class="actions">
-                                    <button type="button" class="reject-btn" onclick="deleteUser(<?= htmlspecialchars($row['id']) ?>)">
-                                        Delete
-                                    </button>
-                                </td>
-
+                                <!-- View Button -->
+                                <td>
+                                    <form action="view_user.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="user_id" value="<?= $row['id']; ?>">
+                                        <button type="submit" class="view-btn btn btn-primary btn-sm">View</button>
+                                        </form>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach; ?></td>
 
 
 

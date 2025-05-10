@@ -135,11 +135,11 @@ $articles_result = $mysqli->query($articles_query);
 </form> -->
 
 <!-- Delete Button triggers modal -->
-<button type="button" onclick="openModal(<?= $row['id']; ?>)" class="reject-btn">Delete</button>
+
 
 
 <!-- View Button -->
-<!-- <form action="view.php" method="POST" style="display:inline;">
+<form action="view.php" method="POST" style="display:inline;">
                 <input type="hidden" name="article_id" value="<?= $row['id']; ?>">
                 <button type="button" onclick="openViewModal(<?= $row['id']; ?>)" class="view-btn">View</button>
                 <div id="viewModal" class="modal" style="display:none;">
@@ -159,7 +159,7 @@ $articles_result = $mysqli->query($articles_query);
                     </div>
                   </div>
                 </div>
-              </form> -->
+              </form>
 
               
             

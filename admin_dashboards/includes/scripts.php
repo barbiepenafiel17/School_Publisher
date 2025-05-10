@@ -88,30 +88,4 @@
   <script src="js/newsfeed.js"></script>
   <script src="js/database_helper.js"></script>
 
-<script>
-    function deleteUser(userId) {
-        if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
-            fetch('delete.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: userId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("User deleted successfully.");
-                    // Optionally, remove the row from the table
-                    document.querySelector(`button[onclick="deleteUser(${userId})"]`).closest('tr').remove();
-                } else {
-                    alert("Failed to delete user: " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred while deleting the user.");
-            });
-        }
-    }
-</script>
+
