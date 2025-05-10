@@ -16,7 +16,22 @@
     <script src="js/demo/chart-pie-demo.js"></script>
 
 
-   
+   <script>
+    document.getElementById('alertsDropdown').addEventListener('click', function () {
+        fetch('mark_notifications_read.php', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the notification counter
+                const badgeCounter = document.querySelector('.badge-counter');
+                badgeCounter.textContent = '';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
 
   <script>
     function openModal(articleId) {
@@ -65,14 +80,38 @@
       const modal = document.getElementById('viewModal');
       modal.style.display = 'none';
     }
-    function confirmDelete(userId) {
-    if (confirm("Are you sure you want to delete this user and all related data?")) {
-        window.location.href = "delete.php?id=" + userId;
-    }
-}
     
+    $user_id = $_SESSION['user_id']; // assuming this is the admin ID
+    $sql = "SELECT * FROM admin_notifications WHERE reference_id = ? ORDER BY created_at DESC LIMIT 5";
+
   </script>
   <script src="js/newsfeed.js"></script>
   <script src="js/database_helper.js"></script>
 
-
+<script>
+    function deleteUser(userId) {
+        if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+            fetch('delete.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("User deleted successfully.");
+                    // Optionally, remove the row from the table
+                    document.querySelector(`button[onclick="deleteUser(${userId})"]`).closest('tr').remove();
+                } else {
+                    alert("Failed to delete user: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the user.");
+            });
+        }
+    }
+</script>
