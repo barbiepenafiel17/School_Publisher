@@ -1,3 +1,10 @@
+<?php
+require 'db.php'; // Include your database connection file
+
+// Fetch the latest articles
+$query = "SELECT id, title, abstract, featured_image FROM articles WHERE status = 'approved' ORDER BY created_at DESC LIMIT 6";
+$result = $mysqli->query($query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,25 +14,40 @@
 </head>
 <body>
 
-  <header class="navbar">
-    <div class="logo">
-      <img src="FinalLogo.jpg" alt="DBCLM Logo">
-    </div>
-    <nav class="nav-links">
-      <a href="landingpage.php">Home</a>
-      <a href="#">Latest</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
-    <div class="login">
-      <a href="login.php">LOGIN</a>
-    </div>
-  </header>
+  <link rel="stylesheet" href="header.css">
 
+<header class="navbar">
+  <div class="logo">
+    <img src="FinalLogo.jpg" alt="DBCLM Logo">
+  </div>
+  <nav class="nav-links">
+    <a href="landingpage.php">Home</a>
+    <!-- <a href="#">Latest</a> -->
+    <a href="aboutus.php">About</a>
+    <a href="contactus.php">Contact</a>
+  </nav>
+  <div class="navbar-right">
+    <div class="notification-wrapper">
+      <img src="bell.jpg" alt="Notifications" class="icon-bell" id="notif-bell">
+        
+      </div>
+      <div class="notification-user">
+      <a href="login.php">Login</a>
+        
+      </div>
+    </div>
+    
+
+    
+  </div>
+</header>
+
+<!-- Add the header-specific JavaScript file -->
+<script src="header.js"></script>
   <section class="banner">
     <img src="headers.png" alt="Library Banner">
     <button class="publish-btn" >
-      <a href="login.php">PUBLISH ARTICLE</a>
+      <a href="login.php" style="text-decoration:none; color:black;">PUBLISH ARTICLE</a>
     </button>
   </section>
 
@@ -33,16 +55,28 @@
     <p class="section-subtitle">THE LATEST</p>
     <h2>Featured News</h2>
 
+
 <div class="grid-container">
-  <div class="grid-item"></div>
-  <div class="grid-item"></div>
-  <div class="grid-item"></div>
-  <div class="grid-item"></div>
-  <div class="grid-item"></div>
-  <div class="grid-item"></div>
+  <?php if ($result->num_rows > 0): ?>
+    <?php while ($article = $result->fetch_assoc()): ?>
+      <div class="grid-item">
+        <div class="article-card">
+          <?php if (!empty($article['featured_image'])): ?>
+            <img src="<?= htmlspecialchars($article['featured_image']); ?>" alt="Article Image" class="article-image">
+          <?php endif; ?>
+          <h3 class="article-title"><?= htmlspecialchars($article['title']); ?></h3>
+          <p class="article-abstract"><?= htmlspecialchars($article['abstract']); ?></p>
+          <a href="view_article.php?article_id=<?= $article['id']; ?>" class="read-more">Read More →</a>
+        </div>
+      </div>
+    <?php endwhile; ?>
+  <?php else: ?>
+    <p>No articles available at the moment.</p>
+  <?php endif; ?>
 </div>
 
-    <button class="view-all">View All Articles →</button>
+
+    <button class="view-all"><a href="login.php"style="text-decoration:none; color:black;">View All Articles →</a></button>
   </section>
 
   <section class="mission-section">
@@ -67,7 +101,7 @@
   </div>
 
   <div class="developer-slider">
-    <button class="slider-arrow">&lt;</button>
+    
 
     <div class="developer-cards"><img src="marj.jpg" class="dev-card">
       <div class="dev-card"><img src="lai.jpg" class="dev-card"></div>
@@ -76,7 +110,7 @@
       <div class="dev-card"><img src="cheni.jpg" class="dev-card"></div>
     </div>
 
-    <button class="slider-arrow">&gt;</button>
+    
   </div>
 </section>
 
