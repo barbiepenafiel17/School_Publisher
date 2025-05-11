@@ -1,0 +1,174 @@
+/* Admin Layout CSS */
+
+/* Notification Dropdown Styling */
+.notifications {
+  position: relative;
+}
+
+.notifications .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  padding: 3px 6px;
+  border-radius: 50%;
+  background-color: #e74a3b;
+  color: white;
+  font-size: 0.75rem;
+}
+
+.dropdown-list {
+  width: 320px;
+  padding: 0;
+  font-size: 0.85rem;
+  border: none;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.dropdown-header {
+  background-color: #4e73df;
+  border: 1px solid #4e73df;
+  color: white;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.75rem 1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.dropdown-item {
+  white-space: normal;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:active {
+  background-color: #f8f9fc;
+  color: #3a3b45;
+}
+
+.dropdown-item.d-flex {
+  align-items: center;
+}
+
+/* Read/Unread styling */
+.dropdown-item.unread {
+  background-color: #f8f9fc;
+}
+
+.dropdown-item.read {
+  background-color: #ffffff;
+  opacity: 0.85;
+}
+
+.icon-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+}
+
+/* Notification type colors */
+.bg-primary {
+  background-color: #4e73df !important;
+}
+
+.bg-success {
+  background-color: #1cc88a !important;
+}
+
+.bg-warning {
+  background-color: #f6c23e !important;
+}
+
+.bg-danger {
+  background-color: #e74a3b !important;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.small {
+  font-size: 0.875rem;
+}
+
+.text-gray-500 {
+  color: #b7b9cc !important;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.font-weight-normal {
+  font-weight: 400 !important;
+}
+
+.animated--grow-in {
+  animation-name: growIn;
+  animation-duration: 200ms;
+  animation-timing-function: transform cubic-bezier(0.18, 1.25, 0.4, 1), opacity cubic-bezier(0, 1, 0.4, 1);
+}
+
+@keyframes growIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Show All Notifications link styling */
+.dropdown-item.text-center {
+  background-color: #f8f9fc;
+  padding: 0.75rem;
+  font-weight: 600;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item.text-center:hover {
+  background-color: #eaecf4;
+  color: #4e73df;
+}
+
+/* Fix for notification spacing */
+.notifications .dropdown-item .mr-3 {
+  margin-right: 0.75rem !important;
+}
+
+/* Animation for new notifications */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.notification-new {
+  animation: pulse 1s ease-in-out;
+}

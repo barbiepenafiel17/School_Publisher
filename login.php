@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'db_connect.php';
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["role"] = "Admin";
         $_SESSION["email"] = $email;
         $_SESSION["full_name"] = "Administrator";
-        echo "<script>alert('Logged in as Admin!'); window.location.href='admin_dashboards/index.php';</script>";
+        echo "<script>alert('Logged in as Admin!'); window.location.href='admin_dashboard.php';</script>";
         exit();
     }
     $query = "SELECT id, full_name, email, profile_picture FROM users WHERE email = ?";
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
-    
+
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['full_name'] = $user['full_name'];
     $_SESSION['email'] = $user['email'];
@@ -68,12 +68,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Login - DBCLM College</title>
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="header.css">
 </head>
+
 
 <body>
     <header class="navbar">
@@ -98,39 +100,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 </header>
 
-<div class="login-container">
-    <form method="post" action="">
-        <img src="FinalLogo.jpg" alt="DBCLM College" class="loginlogo">
-        <h2>Sign in to Your Account</h2>
+    <div class="login-container">
+        <form method="post" action="">
+            <img src="FinalLogo.jpg" alt="DBCLM College" class="loginlogo">
+            <h2>Sign in to Your Account</h2>
 
-        <?php if (!empty($loginError)): ?>
-            <p style="color: red;"><?php echo $loginError; ?></p>
-        <?php endif; ?>
+            <?php if (!empty($loginError)): ?>
+                <p style="color: red;"><?php echo $loginError; ?></p>
+            <?php endif; ?>
 
-        <input type="email" name="email" placeholder="Enter your email" required>
-        <input type="password" name="password" placeholder="Password" id="passwordInput" required>
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <input type="password" name="password" placeholder="Password" id="passwordInput" required>
 
-        <label>
-            <input type="checkbox" onclick="togglePassword()"> Show Password
-        </label>
+            <label>
+                <input type="checkbox" onclick="togglePassword()"> Show Password
+            </label>
 
-        <label><input type="checkbox" name="remember"> Remember me</label>
+            <label><input type="checkbox" name="remember"> Remember me</label>
 
-        <button type="submit">Sign In</button>
+            <button type="submit">Sign In</button>
 
-        <div class="footer-links">
-            <a href="#">Forgot password?</a><br>
-            <a href="signup.php">Don't have an account? Sign up</a>
-        </div>
-    </form>
-</div>
+            <div class="footer-links">
+                <a href="#">Forgot password?</a><br>
+                <a href="signup.php">Don't have an account? Sign up</a>
+            </div>
+        </form>
+    </div>
 
-<script>
-    function togglePassword() {
-        const passwordField = document.getElementById('passwordInput');
-        passwordField.type = passwordField.type === "password" ? "text" : "password";
-    }
-</script>
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('passwordInput');
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+    </script>
 
 </body>
+
 </html>
