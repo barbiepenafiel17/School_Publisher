@@ -10,7 +10,7 @@
   </div>
   <nav class="sidebar-nav">
     <ul>
-      <li class="nav-item active">
+      <li class="nav-item ">
         <a href="admin_dashboard.php" class="nav-link">
           <i class="fas fa-tachometer-alt"></i>
           <span>Dashboard</span>

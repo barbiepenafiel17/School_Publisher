@@ -105,7 +105,7 @@ function getFilteredArticles(PDO $pdo, array $institutes, string $sortOption = '
       }
     }
 
-    
+
     // Join patterns with OR
     if (!empty($patterns)) {
       $baseQuery .= " AND (" . implode(' OR ', $patterns) . ")";
@@ -174,7 +174,9 @@ function getCommentsForArticle(PDO $pdo, int $articleId)
   $stmt->execute(['article_id' => $articleId]);
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-function getPaginatedArticles($pdo, $offset, $limit) {
+
+function getPaginatedArticles($pdo, $offset, $limit)
+{
   $stmt = $pdo->prepare("
       SELECT a.*, u.full_name, u.profile_picture 
       FROM articles a 
@@ -185,6 +187,103 @@ function getPaginatedArticles($pdo, $offset, $limit) {
   ");
   $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
   $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+  $stmt->execute();
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Fetch filtered articles with pagination support
+ * 
+ * @param PDO $pdo Database connection
+ * @param array $institutes List of institutes to filter by
+ * @param string $sortOption Sorting option ('new', 'old', 'popular')
+ * @param int $limit Maximum number of articles to return
+ * @param int $offset Number of articles to skip
+ * @return array List of filtered articles for the current page
+ */
+function getFilteredArticlesPaginated(PDO $pdo, array $institutes, string $sortOption = 'new', int $limit = 5, int $offset = 0): array
+{
+  // Start session if not already started
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
+
+  $userId = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+
+  // Base query to get articles and exclude hidden ones
+  $baseQuery = "SELECT a.*, u.full_name, u.profile_picture,
+              (SELECT COUNT(*) FROM reactions WHERE article_id = a.id AND reaction_type = 'like') AS likes,
+              (SELECT COUNT(*) FROM comments WHERE article_id = a.id) AS comments
+              FROM articles a
+              JOIN users u ON a.user_id = u.id
+              WHERE a.status = 'approved' 
+              AND NOT EXISTS (
+                SELECT 1 FROM hidden_articles h 
+                WHERE h.article_id = a.id AND h.user_id = :userId
+              )";
+
+  // Filter by user's institute, handling abbreviations correctly
+  if (!empty($institutes) && !in_array('All', $institutes)) {
+    // Convert abbreviations to LIKE patterns for partial matching
+    $patterns = [];
+    foreach ($institutes as $institute) {
+      switch ($institute) {
+        case 'IC':
+          $patterns[] = "u.institute LIKE '%IC%'";
+          break;
+        case 'ILEGG':
+          $patterns[] = "u.institute LIKE '%ILEGG%'";
+          break;
+        case 'ITed':
+          $patterns[] = "u.institute LIKE '%ITed%'";
+          break;
+        case 'IAAS':
+          $patterns[] = "u.institute LIKE '%IAAS%'";
+          break;
+        default:
+          // For full institute names (in case they're used)
+          $patterns[] = "u.institute = ?";
+      }
+    }
+
+    // Join patterns with OR
+    if (!empty($patterns)) {
+      $baseQuery .= " AND (" . implode(' OR ', $patterns) . ")";
+    }
+  }
+
+  // Add sorting logic
+  switch ($sortOption) {
+    case 'old':
+      $baseQuery .= " ORDER BY a.created_at ASC";
+      break;
+    case 'popular':
+      $baseQuery .= " ORDER BY likes DESC";
+      break;
+    case 'new':
+    default:
+      $baseQuery .= " ORDER BY a.created_at DESC";
+      break;
+  }
+
+  // Add pagination
+  $baseQuery .= " LIMIT :limit OFFSET :offset";
+
+  $stmt = $pdo->prepare($baseQuery);
+  $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+  $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+  $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+  // Bind institute parameters if needed (only for full institute names)
+  $paramIndex = 1;
+  if (!empty($institutes) && !in_array('All', $institutes)) {
+    foreach ($institutes as $institute) {
+      if (!in_array($institute, ['IC', 'ILEGG', 'ITed', 'IAAS'])) {
+        $stmt->bindValue($paramIndex++, $institute);
+      }
+    }
+  }
+
   $stmt->execute();
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
