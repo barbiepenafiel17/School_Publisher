@@ -31,7 +31,7 @@ if ($user_stats_result && $user_stats_result->num_rows > 0) {
   ];
 }
 
-// Fetch the latest users with their details
+// Fetch all users with their details
 $users_query = "
     SELECT 
         users.id,
@@ -45,7 +45,6 @@ $users_query = "
         users 
     ORDER BY 
         users.created_at DESC
-    LIMIT 5
 ";
 $users_result = $conn->query($users_query);
 
