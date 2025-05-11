@@ -87,9 +87,10 @@ $latest_announcements = getLatestAnnouncements($pdo);
 
                     <div class="post-box-input">
                         <img src="<?php echo $profile_picture; ?>" alt="User" class="avatar">
-                        <form class="post-form" action="submit_article.php" method="POST">
+                        <form class="post-form " style="display: flex; " action="submit_article.php" method="POST">
                             <input type="text" class="post-input" id="articleInput" name="title"
                                 placeholder="What's on your mind? Want to publish your own article?" required>
+                            <button type="submit" class="post-btn" style="margin-left:12px;">Submit</button>
                         </form>
 
                     </div>
@@ -167,12 +168,18 @@ $latest_announcements = getLatestAnnouncements($pdo);
                     </div>
                 </div>
                 <div class="post-feed" id="postFeed">
-                    <?php if (!empty($articles)): ?>
-                        <?php foreach ($articles as $row): ?>
+                    <?php
+                    // Get only the first batch of articles
+                    $initialLimit = 5;
+                    // Store filtered institutes in session for AJAX requests
+                    $_SESSION['filtered_institutes'] = $institutes;
+                    $initialArticles = getFilteredArticlesPaginated($pdo, $institutes, $sortOption, $initialLimit, 0);
+                    ?>
+
+                    <?php if (!empty($initialArticles)): ?>
+                        <?php foreach ($initialArticles as $row): ?>
                             <?php $articleId = $row['id']; ?>
                             <div class="post-card" data-article-id="<?= $articleId ?>">
-
-
                                 <div class="post-card-header">
                                     <div class="post-header">
                                         <img class="avatar"
@@ -194,14 +201,16 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                     onsubmit="return confirm('Delete this article?');">
                                                     <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                     <button type="submit"
-                                                        style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-trash-o" style="margin-right:10px;"></i>Delete</button>
+                                                        style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
+                                                            class="fa fa-trash-o" style="margin-right:10px;"></i>Delete</button>
                                                 </form>
                                             <?php endif ?>
                                             <!-- Hide -->
                                             <form method="POST" action="hide_article.php">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-eye-slash" style="margin-right:10px;"></i>Hide</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
+                                                        class="fa fa-eye-slash" style="margin-right:10px;"></i>Hide</button>
                                             </form>
 
                                             <!-- Report -->
@@ -209,26 +218,33 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 onsubmit="return confirm('Report this article to admin?');">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-exclamation-triangle" style="margin-right:10px; color:yellow;"></i>Report</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
+                                                        class="fa fa-exclamation-triangle"
+                                                        style="margin-right:10px; color:yellow;"></i>Report</button>
                                             </form>
                                             <!-- Save -->
                                             <form method="POST" action="save_A.php">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
+                                                        class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
 
                                             </form>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="post-title" style="font-family: Poppins; font-size:40px"><strong><?= htmlspecialchars($row['title']) ?></strong></div>
-                                <div class="post-content" style="font-family: Poppins; font-size:20px; text-align:justify"><?= htmlspecialchars($row['abstract']) ?></div>
+                                <div class="post-title" style="font-family: Poppins; font-size:40px">
+                                    <strong><?= htmlspecialchars($row['title']) ?></strong>
+                                </div>
+                                <div class="post-content" style="font-family: Poppins; font-size:20px; text-align:justify">
+                                    <?= htmlspecialchars($row['abstract']) ?>
+                                </div>
 
                                 <?php if (!empty($row['featured_image'])): ?>
                                     <div class="post-image">
                                         <img src="<?= htmlspecialchars($row['featured_image']) ?>" alt="Article Image"
-                                            class="responsive-img">
+                                            class="responsive-img" loading="lazy">
                                     </div>
                                 <?php endif; ?>
 
@@ -271,7 +287,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                             placeholder="Write a comment..." required>
                                         <button class="post-form-button" type="submit">Post</button>
                                     </form>
-                                    
+
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -279,6 +295,17 @@ $latest_announcements = getLatestAnnouncements($pdo);
                         <p>No approved articles available yet.</p>
                     <?php endif; ?>
                 </div>
+
+                <div class="load-more-container" id="loadMoreContainer">
+                    <button id="loadMoreBtn" class="load-more-btn">Load More</button>
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+
+                <!-- Store the current offset and sort option -->
+                <input type="hidden" id="currentOffset" value="<?= $initialLimit ?>">
+                <input type="hidden" id="currentSort" value="<?= $sortOption ?>">
             </div>
             <!-- Post Feeds -->
         </main>

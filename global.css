@@ -111,6 +111,24 @@ body {
   color: white;
 }
 
+/* Button Styles */
+.post-btn {
+  background: white;
+  color: #1d4ed8;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: lighter;
+  border: 1px solid #1d4ed8;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.post-btn:hover {
+  background: #1d4ed8;
+  color: white;
+}
+
 .submit-btn {
   background: #1d4ed8;
   color: white;

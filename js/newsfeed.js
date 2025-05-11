@@ -468,3 +468,144 @@ function initCommentFormListeners() {
 document.addEventListener('DOMContentLoaded', function() {
     initCommentFormListeners();
 });
+
+/**
+ * Lazy Loading Implementation
+ * This handles loading more articles when the user scrolls or clicks the Load More button
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const postFeed = document.getElementById('postFeed');
+    const currentOffset = document.getElementById('currentOffset');
+    const currentSort = document.getElementById('currentSort');
+    
+    // Check if elements exist
+    if (loadMoreBtn && loadingSpinner && postFeed && currentOffset) {
+        // Add click event to load more button
+        loadMoreBtn.addEventListener('click', loadMoreArticles);
+        
+        // Also load more when user scrolls near the bottom
+        window.addEventListener('scroll', function() {
+            if (isScrollNearBottom() && loadMoreBtn && !loadMoreBtn.classList.contains('disabled')) {
+                loadMoreArticles();
+            }
+        });
+    }
+    
+    /**
+     * Load more articles via AJAX
+     */
+    function loadMoreArticles() {
+        if (!loadMoreBtn || !loadingSpinner || !postFeed || !currentOffset) return;
+        
+        // Disable button and show spinner
+        loadMoreBtn.classList.add('disabled');
+        loadMoreBtn.innerText = 'Loading...';
+        loadingSpinner.style.display = 'block';
+        
+        // Get current offset value
+        const offset = parseInt(currentOffset.value);
+        const sortOption = currentSort ? currentSort.value : 'new';
+        const limit = 5; // Number of articles to load per batch
+        
+        // Make AJAX request
+        const formData = new FormData();
+        formData.append('offset', offset);
+        formData.append('limit', limit);
+        formData.append('sort', sortOption);
+        
+        fetch('load_more_articles.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Hide spinner
+            loadingSpinner.style.display = 'none';
+            
+            if (data.error) {
+                console.error('Error loading more articles:', data.error);
+                loadMoreBtn.innerText = 'Error. Try Again';
+                loadMoreBtn.classList.remove('disabled');
+                return;
+            }
+            
+            // Append new content
+            if (data.html) {
+                postFeed.insertAdjacentHTML('beforeend', data.html);
+                
+                // Update offset
+                currentOffset.value = offset + data.count;
+                
+                // If no more articles, hide the button
+                if (!data.hasMore) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.innerText = 'Load More';
+                    loadMoreBtn.classList.remove('disabled');
+                }
+                
+                // Reinitialize event handlers for the new content
+                initializeEventHandlers();
+            } else {
+                loadMoreBtn.innerText = 'No More Articles';
+                loadMoreBtn.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            loadingSpinner.style.display = 'none';
+            loadMoreBtn.innerText = 'Error. Try Again';
+            loadMoreBtn.classList.remove('disabled');
+        });
+    }
+    
+    /**
+     * Check if user has scrolled near the bottom of the page
+     * @returns {boolean} True if user is near bottom of page
+     */
+    function isScrollNearBottom() {
+        return (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500;
+    }
+    
+    /**
+     * Initialize event handlers for newly loaded content
+     */
+    function initializeEventHandlers() {
+        // Re-initialize dropdown toggles
+        document.querySelectorAll('.dot-btn').forEach(btn => {
+            if (!btn.hasEventListener) {
+                btn.hasEventListener = true;
+                btn.addEventListener('click', function() {
+                    toggleDropdown(this);
+                });
+            }
+        });
+        
+        // Re-initialize like buttons
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            if (!btn.hasEventListener) {
+                btn.hasEventListener = true;
+                btn.addEventListener('click', function() {
+                    const articleId = this.getAttribute('data-article-id');
+                    // Call your like handler function here
+                    // For example: handleLike(articleId);
+                    
+                    // If you're using jQuery for likes
+                    $(this).trigger('click');
+                });
+            }
+        });
+        
+        // Re-initialize comment forms if needed
+        document.querySelectorAll('.comment-form').forEach(form => {
+            if (!form.hasEventListener) {
+                form.hasEventListener = true;
+                form.addEventListener('submit', function(e) {
+                    // Your comment submission logic here if needed
+                });
+            }
+        });
+    }
+});

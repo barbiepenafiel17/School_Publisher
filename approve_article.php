@@ -1,10 +1,18 @@
 <?php
 include 'db_connect.php'; // Ensure db.php creates $conn properly
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ensure the article ID is present in the POST data
-    if (isset($_POST['article_id']) && is_numeric($_POST['article_id'])) {
+// Handle both POST and GET requests for flexibility
+if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Check for article ID in both POST and GET
+    $article_id = null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['article_id']) && is_numeric($_POST['article_id'])) {
         $article_id = $_POST['article_id'];
+    } else if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $article_id = $_GET['id'];
+    }
+
+    // Proceed if we have a valid article ID
+    if ($article_id !== null) {
 
         // Prepare the statement to approve the article
         $update_stmt = $conn->prepare("UPDATE articles SET status = 'APPROVED' WHERE id = ?");
@@ -23,10 +31,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result->num_rows > 0) {
                 $article = $result->fetch_assoc();
                 $author_id = $article['user_id'];
-                $article_title = htmlspecialchars($article['title']); // Clean for safety
+                $article_title = htmlspecialchars($article['title']); // Clean for safety                // Check for approval notes
+                $approval_notes = isset($_POST['approval_notes']) ? trim($_POST['approval_notes']) : '';
 
                 // Prepare the notification message
                 $message = "🎉 Your article titled '{$article_title}' has been approved!";
+
+                // Add approval notes if provided
+                if (!empty($approval_notes)) {
+                    $message .= " Notes: " . $approval_notes;
+                }
 
                 // Insert notification into the database
                 $notif_stmt = $conn->prepare("INSERT INTO notifications (user_id, message, is_read, created_at) VALUES (?, ?, 0, NOW())");
@@ -53,9 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $update_stmt->close();
-        $conn->close();
-
-        // Redirect back to admin dashboard with success indicator
+        $conn->close();        // Redirect back to admin dashboard with success indicator
         header("Location: admin_dashboard.php?approved=1");
         exit();
     } else {
@@ -63,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Invalid article ID.");
     }
 } else {
-    // Handle incorrect request method (not POST)
-    die("Invalid request method.");
+    // Handle incorrect request method (not POST or GET)
+    die("Invalid request method. This endpoint requires either POST or GET.");
 }
 ?>
