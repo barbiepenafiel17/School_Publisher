@@ -111,7 +111,7 @@ include('includes/scripts.php');
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
                         <div class="dropdown-divider"></div>
-                         <a class="dropdown-item" href="/../logout.php">
+                        <a class="dropdown-item" href="/../logout.php">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>
@@ -121,44 +121,44 @@ include('includes/scripts.php');
             </ul>
 
         </nav>
-          <div class="container-fluid" style="width: 100%;">
-    
+        <div class="container-fluid" style="width: 100%;">
 
-    <div class="container" style="width: 100%; margin:20px">
-      <div class="announcement-box" >
-        <h2>Create New Announcement</h2>
 
-        <?php
-// Connect to your database
-$pdo = new PDO("mysql:host=localhost;dbname=dbclm_college", "root", ""); // Change credentials as needed
-?>
+            <div class="container" style="width: 100%; margin:20px">
+                <div class="announcement-box">
+                    <h2>Create New Announcement</h2>
 
-<form action="save_announcement.php" method="POST" enctype="multipart/form-data">
-  <div class="announcement-form">
-    <label>Title</label>
-    <input type="text" name="title" required placeholder="Enter announcement title" />
+                    <?php
+                    // Connect to your database
+                    $pdo = new PDO("mysql:host=localhost;dbname=dbclm_college", "root", ""); // Change credentials as needed
+                    ?>
 
-    <label>Content</label>
-    <textarea name="content" required placeholder="Write your announcement content here..."></textarea>
+                    <form action="save_announcement.php" method="POST" enctype="multipart/form-data">
+                        <div class="announcement-form">
+                            <label>Title</label>
+                            <input type="text" name="title" required placeholder="Enter announcement title" />
 
-    <label>Target Audience</label>
-    <div class="checkbox-group">
-      <label><input type="checkbox" name="audience[]" value="students" /> Students</label>
-      <label><input type="checkbox" name="audience[]" value="teacher" /> Teacher</label>
-    </div>
+                            <label>Content</label>
+                            <textarea name="content" required placeholder="Write your announcement content here..."></textarea>
 
-    <div class="notify">
-      <label><input type="checkbox" name="notify" value="1" /> Send notification to users</label>
-    </div>
+                            <label>Target Audience</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="audience[]" value="students" /> Students</label>
+                                <label><input type="checkbox" name="audience[]" value="teacher" /> Teacher</label>
+                            </div>
 
-    <div class="actions">
-      <button type="submit" name="action" value="cancel">Cancel</button>
-      <button type="submit" name="action" value="publish">Publish</button>
-    </div>
-  </div>
-</form>
-      </div>
-    </div>
-  </div>
+                            <div class="notify">
+                                <label><input type="checkbox" name="notify" value="1" /> Send notification to users</label>
+                            </div>
+
+                            <div class="actions">
+                                <button type="submit" name="action" value="cancel">Cancel</button>
+                                <button type="submit" name="action" value="publish">Publish</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
