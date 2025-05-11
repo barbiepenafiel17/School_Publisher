@@ -72,25 +72,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Login - DBCLM College</title>
     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="header.css">
 </head>
-<body>
 
-<header class="navbar">
-    <div class="logo">
-        <img src="FinalLogo.jpg" alt="DBCLM Logo">
+<body>
+    <header class="navbar">
+  <div class="logo">
+    <img src="FinalLogo.jpg" alt="DBCLM Logo">
+  </div>
+  <nav class="nav-links">
+    <a href="landingpage.php">Home</a>
+    <a href="aboutus.php">About</a>
+    <a href="contactus.php">Contact</a>
+  </nav>
+  <div class="navbar-right">
+    <div class="notification-wrapper">
+      <img src="bell.jpg" alt="Notifications" class="icon-bell" id="notif-bell">
+        
+      </div>
+      <div class="notification-user">
+      <a href="login.php">Login</a>
+        
+      </div>
     </div>
-    <nav class="nav-links">
-        <a href="newsfeed.php">Home</a>
-        <a href="#">Latest</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
-    <div class="navbar-right">
-        <img src="bell.jpg" alt="Notifications" class="icon-bell">
-        <span class="user-label">
-            <?php echo isset($_SESSION['full_name']) ? htmlspecialchars($_SESSION['full_name']) : 'Guest'; ?>
-        </span>
-    </div>
+    
 </header>
 
 <div class="login-container">
