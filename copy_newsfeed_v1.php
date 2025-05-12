@@ -26,7 +26,7 @@ if (!$user) {
 }
 
 // Get initial articles (first batch)
-$initialLimit = 5;
+$initialLimit = 3;
 $institutes = ['All'];
 $sortOption = 'new';
 $articles = getFilteredArticlesPaginated($pdo, $institutes, $sortOption, $initialLimit, 0);
@@ -201,7 +201,8 @@ $latest_announcements = getLatestAnnouncements($pdo);
     <footer class="footer">
       <?php require_once 'components/footer.php'; ?>
     </footer>
-  </div> <!-- Pass initial data to JavaScript -->
+  </div>
+  <!-- Pass initial data to JavaScript -->
   <script>
     window.initialData = {
       user: <?= json_encode($user) ?>,
@@ -217,8 +218,8 @@ $latest_announcements = getLatestAnnouncements($pdo);
   </script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/header.js"></script>
   <script src="js/newsfeed_v2.js"></script>
-
 </body>
 
 </html>

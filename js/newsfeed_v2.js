@@ -81,54 +81,7 @@ function renderArticleFeed() {
 
 // Component-based rendering functions
 const components = {
-    // Header component
-    renderHeader() {
-        return `
-            <header class="navbar">
-                <div class="logo">
-                    <img src="FinalLogo.jpg" alt="DBCLM Logo">
-                </div>
-                <nav class="nav-links">
-                    <a href="copy_newsfeed_v1.php">Home</a>
-                    <a href="aboutus.php">About</a>
-                    <a href="contactus.php">Contact</a>
-                </nav>
-                <div class="navbar-right">
-                    <div class="notification-wrapper">
-                        <img src="bell.jpg" alt="Notifications" class="icon-bell" id="notif-bell">
-                        ${state.notifications.count > 0 ? `<span class="notif-badge">${state.notifications.count}</span>` : ''}
-                        <div class="notif-dropdown" id="notif-dropdown">
-                            ${this.renderNotifications()}
-                        </div>
-                    </div>
-
-                    <div class="user-dropdown">
-                        <button class="user-label" id="userMenuButton">
-                            ${escapeHtml(state.user.full_name)} &#x25BC;
-                        </button>
-                        <div id="user-menu" class="dropdown-content">
-                            <a href="profile.php">Profile</a>
-                            <a href="logout.php">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        `;
-    },
-
-    // Notifications component
-    renderNotifications() {
-        if (state.notifications.count > 0) {
-            return state.notifications.items.map(notif => `
-                <div class="notif-item">
-                    ${escapeHtml(notif.message || '')}
-                    <br><small style="color:gray;">${formatDate(notif.created_at)}</small>
-                </div>
-            `).join('');
-        } else {
-            return '<div class="notif-item">No new notifications</div>';
-        }
-    },
+    
 
     // Sidebar component 
     renderSidebar() {
@@ -477,36 +430,7 @@ function nl2br(str) {
 
 // Initialize all event listeners
 function initializeAllEventListeners() {
-    // Notification bell
-    document.getElementById('notif-bell')?.addEventListener('click', function () {
-        // Toggle display between 'none' and 'block'
-        const dropdown = document.getElementById('notif-dropdown');
-        dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
-
-        // If visible, mark all notifications as read via AJAX
-        if (dropdown.style.display === 'block') {
-            fetch('mark_notification_read.php', {
-                method: 'POST'
-            })
-                .then(response => response.text())
-                .then(() => {
-                    const badge = document.querySelector('.notif-badge');
-                    if (badge) {
-                        badge.style.display = 'none';
-                    }
-                    state.notifications.count = 0;
-                });
-        }
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function (e) {
-        const dropdown = document.getElementById('notif-dropdown');
-        const bell = document.getElementById('notif-bell');
-        if (dropdown && bell && !dropdown.contains(e.target) && e.target !== bell && dropdown.style.display === 'block') {
-            dropdown.style.display = 'none';
-        }
-    });
+ 
 
     // User menu dropdown
     document.getElementById('userMenuButton')?.addEventListener('click', toggleUserMenu);
@@ -841,7 +765,7 @@ async function loadMoreArticles() {
                 institutes: state.filters.institutes,
                 sort: state.sortOption,
                 offset: state.currentOffset,
-                limit: 5
+                limit: 3
             })
         });
 
