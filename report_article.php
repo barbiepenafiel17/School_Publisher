@@ -39,6 +39,6 @@ $notif_stmt->close();
 $conn->close();
 
 // Redirect back with a success message
-header("Location: newsfeed.php?status=reported");
+header("Location: copy_newsfeed_v1.php?status=reported");
 exit();
 ?>

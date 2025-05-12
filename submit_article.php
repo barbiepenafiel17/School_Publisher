@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $stmt->execute([$user_id, $title, $abstract, $content, $upload_path, $comments_enabled, $notifications]);
 
-        header("Location: newsfeed.php?submitted=1");
+        header("Location: copy_newsfeed_v1.php?submitted=1");
         exit();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
