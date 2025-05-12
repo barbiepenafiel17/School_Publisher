@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["role"] = $role;
 
             if ($role === "Student" || $role === "Teacher") {
-                echo "<script>alert('Logged in as $role!'); window.location.href='newsfeed.php';</script>";
+                echo "<script>alert('Logged in as $role!'); window.location.href='copy_newsfeed_v1.php';</script>";
                 exit();
             } else {
                 $loginError = "Invalid user role detected.";
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <img src="FinalLogo.jpg" alt="DBCLM Logo">
         </div>
         <nav class="nav-links">
-            <a href="newsfeed.php">Home</a>
+            <a href="copy_newsfeed_v1.php">Home</a>
             <a href="#">Latest</a>
             <a href="#">About</a>
             <a href="#">Contact</a>

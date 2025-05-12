@@ -464,7 +464,7 @@ function initCommentFormListeners() {
     });
 }
 
-// Add this to the bottom of your newsfeed.php file or in a separate JS file
+// Add this to the bottom of your copy_newsfeed_v1.php file or in a separate JS file
 document.addEventListener('DOMContentLoaded', function() {
     initCommentFormListeners();
 });

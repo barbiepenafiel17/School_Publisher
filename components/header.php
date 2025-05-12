@@ -17,7 +17,7 @@ $unreadNotifications = $unreadNotifications ?? [];
     <img src="FinalLogo.jpg" alt="DBCLM Logo">
   </div>
   <nav class="nav-links">
-    <a href="newsfeed.php">Home</a>
+    <a href="copy_newsfeed_v1.php">Home</a>
     <!-- <a href="#">Latest</a> -->
     <a href="aboutus.php">About</a>
     <a href="contactus.php">Contact</a>
