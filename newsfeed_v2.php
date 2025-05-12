@@ -26,7 +26,7 @@ if (!$user) {
 }
 
 // Get initial articles (first batch)
-$initialLimit = 5;
+$initialLimit = 3;
 $institutes = ['All'];
 $sortOption = 'new';
 $articles = getFilteredArticlesPaginated($pdo, $institutes, $sortOption, $initialLimit, 0);

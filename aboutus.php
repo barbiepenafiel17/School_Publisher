@@ -42,22 +42,25 @@ $latest_announcements = getLatestAnnouncements($pdo);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>DBCLM College</title>
-  <link rel="stylesheet" href="aboutus.css">
+    <meta charset="UTF-8">
+    <title>DBCLM College</title>
+    <link rel="stylesheet" href="aboutus.css">
 </head>
+
 <body>
-<header class="header">
-            <?php require_once 'components/header.php'; ?>
-        </header>
+    <header class="header">
+        <?php require_once 'components/header.php'; ?>
+    </header>
 
 
 
-  <div class="container">
+    <div class="container">
         <h1>From thought to page—your platform <br> for meaningful <br> publishing. <br>—</h1>
         <p class="subheading">
-            To curate and share thoughtful, high-quality articles <br> that inform, inspire, and engage readers across <br> diverse topics and perspectives.
+            To curate and share thoughtful, high-quality articles <br> that inform, inspire, and engage readers across
+            <br> diverse topics and perspectives.
         </p>
 
         <div class="cards-1">
@@ -70,7 +73,8 @@ $latest_announcements = getLatestAnnouncements($pdo);
                 <button class="code-icon">&lt;&gt;</button>
                 <div class="text-overlay">
                     <h3>What we believe in</h3>
-                    <p>We believe in empowering creators to share <br> ideas that matter. Our tools are built for <br> clarity, reliability, and purposeful publishing.</p>
+                    <p>We believe in empowering creators to share <br> ideas that matter. Our tools are built for <br>
+                        clarity, reliability, and purposeful publishing.</p>
                 </div>
             </div>
             <div class="card2-pic">
@@ -103,22 +107,22 @@ $latest_announcements = getLatestAnnouncements($pdo);
         <p class="subtitle">Get to know the people who lead</p>
 
         <div class="team-carousel">
-            
-            
+
+
             <div class="team-member">
                 <img src="lai.jpg">
                 <p>Laiza Pueblo</p>
             </div>
             <div class="team-member">
-              <img src="barb.jpg">
+                <img src="barb.jpg">
                 <p>Barbie Peñafiel</p>
             </div>
             <div class="team-member">
-                <img src="dona.jpg">              
+                <img src="dona.jpg">
                 <p>Donna Meg Eran</p>
             </div>
             <div class="team-member">
-                <img src="cheni.jpg">             
+                <img src="cheni.jpg">
                 <p> Chenybabes Dalogdug </p>
             </div>
             <div class="team-member">
@@ -126,7 +130,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                 <p>Marjorie Casilao</p>
             </div>
 
-            
+
         </div>
 
         <div class="join-section">
@@ -134,16 +138,18 @@ $latest_announcements = getLatestAnnouncements($pdo);
                 <h2>Join our team, the one<br>with the master touch</h2>
             </div>
             <div class="right">
-                <p class="description">We believe in inspiring talent to reach their fullest potential and creating opportunities that drive growth and success.</p>
-        
+                <p class="description">We believe in inspiring talent to reach their fullest potential and creating
+                    opportunities that drive growth and success.</p>
+
             </div>
         </div>
     </section>
 
 
     <footer class="footer">
-            <?php require_once 'components/footer.php'; ?>
+        <?php require_once 'components/footer.php'; ?>
     </footer>
 
 </body>
+
 </html>
