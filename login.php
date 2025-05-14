@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["role"] = $role;
 
             if ($role === "Student" || $role === "Teacher") {
-                echo "<script>alert('Logged in as $role!'); window.location.href='newsfeed.php';</script>";
+                echo "<script>alert('Logged in as $role!'); window.location.href='copy_newsfeed_v1.php';</script>";
                 exit();
             } else {
                 $loginError = "Invalid user role detected.";
@@ -79,26 +79,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <header class="navbar">
-  <div class="logo">
-    <img src="FinalLogo.jpg" alt="DBCLM Logo">
-  </div>
-  <nav class="nav-links">
-    <a href="landingpage.php">Home</a>
-    <a href="aboutus.php">About</a>
-    <a href="contactus.php">Contact</a>
-  </nav>
-  <div class="navbar-right">
-    <div class="notification-wrapper">
-      <img src="bell.jpg" alt="Notifications" class="icon-bell" id="notif-bell">
-        
-      </div>
-      <div class="notification-user">
-      <a href="login.php">Login</a>
-        
-      </div>
-    </div>
-    
-</header>
+        <div class="logo">
+            <img src="FinalLogo.jpg" alt="DBCLM Logo">
+        </div>
+        <nav class="nav-links">
+            <a href="newsfeed.php">Home</a>
+            <a href="#">Latest</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="navbar-right">
+            <img src="bell.jpg" alt="Notifications" class="icon-bell">
+            <span class="user-label">
+                <?php echo isset($_SESSION['full_name']) ? htmlspecialchars($_SESSION['full_name']) : 'Guest'; ?>
+            </span>
+        </div>
+    </header>
 
     <div class="login-container">
         <form method="post" action="">

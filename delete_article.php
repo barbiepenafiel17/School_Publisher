@@ -27,7 +27,7 @@ try {
             $update_stmt->execute([$article_id]);
 
             if ($update_stmt->rowCount() > 0) {
-                header("Location: newsfeed.php?deleted=1");
+                header("Location: copy_newsfeed_v1.php?deleted=1");
                 exit();
             } else {
                 echo json_encode(['error' => 'Failed to delete the article.']);

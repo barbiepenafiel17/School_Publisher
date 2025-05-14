@@ -25,7 +25,7 @@ $stmt->execute([$user_id, $article_id]);
 
 if ($stmt->rowCount() > 0) {
     // Article is already saved
-    header("Location: newsfeed.php?status=already_saved");
+    header("Location: copy_newsfeed_v1.php?status=already_saved");
     exit();
 }
 
@@ -35,9 +35,9 @@ $insert_stmt = $pdo->prepare($insert_query);
 
 if ($insert_stmt->execute([$user_id, $article_id])) {
     // Redirect back with success message
-    header("Location: newsfeed.php?status=saved");
+    header("Location: copy_newsfeed_v1?status=saved");
 } else {
     // Redirect back with error message
-    header("Location: newsfeed.php?status=error");
+    header("Location: copy_newsfeed_v1?status=error");
 }
 ?>

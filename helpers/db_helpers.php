@@ -201,7 +201,7 @@ function getPaginatedArticles($pdo, $offset, $limit)
  * @param int $offset Number of articles to skip
  * @return array List of filtered articles for the current page
  */
-function getFilteredArticlesPaginated(PDO $pdo, array $institutes, string $sortOption = 'new', int $limit = 5, int $offset = 0): array
+function getFilteredArticlesPaginated(PDO $pdo, array $institutes, string $sortOption = 'new', int $limit = 3, int $offset = 0): array
 {
   // Start session if not already started
   if (session_status() === PHP_SESSION_NONE) {
