@@ -14,7 +14,7 @@
       // Set author profile picture
       const authorImageElement = document.getElementById('modalAuthorImage');
       if (authorImage && authorImage !== '') {
-        authorImageElement.src = 'uploads/' + authorImage;
+        authorImageElement.src = 'uploads/profile_pictures/' + authorImage;
       } else {
         authorImageElement.src = 'profile.jpg'; // Default image
       }      // Set article image if available

@@ -217,8 +217,8 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
                                                     style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
-                                            
-                                                </form>
+
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                 <div class="post-title" style="font-family: Poppins; font-size:40px">
                                     <strong><?= htmlspecialchars($row['title']) ?></strong>
                                 </div>
-                                <div class="post-content" style="font-family: Poppins; font-size:20px; text-align:justify">
+                                <div class="post-content" style="font-family: Poppins; font-size:30px; text-align:justify">
                                     <?= htmlspecialchars($row['abstract']) ?>
                                 </div>
 
@@ -276,6 +276,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                             placeholder="Write a comment..." required>
                                         <button class="post-form-button" type="submit">Post</button>
                                     </form>
+                                    
                                 </div>
                             </div>
                         <?php endforeach; ?>
