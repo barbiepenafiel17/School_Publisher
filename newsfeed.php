@@ -39,13 +39,6 @@ $sortOption = $_POST['sort'] ?? 'new'; // Get sort option from POST request or d
 $articles = getFilteredArticles($pdo, $institutes, $sortOption);
 $latest_announcements = getLatestAnnouncements($pdo);
 ?>
-<?php if (isset($_GET['status'])): ?>
-    <?php if ($_GET['status'] == 'reported'): ?>
-        <div class="alert alert-success">The article has been reported successfully.</div>
-    <?php elseif ($_GET['status'] == 'error'): ?>
-        <div class="alert alert-danger">An error occurred while reporting the article. Please try again.</div>
-    <?php endif; ?>
-<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -195,15 +188,14 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                         <button class="dot-btn" onclick="toggleDropdown(this)">...</button>
                                         <div class="dropdown-content"
                                             style="display: none; position: absolute; top: 0; right: 100%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1;">
-                                            <?php if ($row['user_id'] == $_SESSION['user_id']): ?>
-                                                <!-- Delete -->
-                                                <form method="POST" action="delete_article.php"
-                                                    onsubmit="return confirm('Delete this article?');">
-                                                    <input type="hidden" name="article_id" value="<?= $articleId ?>">
-                                                    <button type="submit"
-                                                        style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
-                                                            class="fa fa-trash-o" style="margin-right:10px;"></i>Delete</button>
-                                                </form>
+                                            <?php if($row['user_id'] == $_SESSION['user_id']): ?>
+                                                    <!-- Delete -->
+                                                    <form method="POST" action="delete_article.php"
+                                                        onsubmit="return confirm('Delete this article?');">
+                                                        <input type="hidden" name="article_id" value="<?= $articleId ?>">
+                                                        <button type="submit"
+                                                            style="color: red; background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-trash-o" style="margin-right:10px;"></i>Delete</button>
+                                                    </form>
                                             <?php endif ?>
                                             <!-- Hide -->
                                             <form method="POST" action="hide_article.php">
@@ -218,16 +210,13 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                                 onsubmit="return confirm('Report this article to admin?');">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
-                                                        class="fa fa-exclamation-triangle"
-                                                        style="margin-right:10px; color:yellow;"></i>Report</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-exclamation-triangle" style="margin-right:10px; color:yellow;" ></i>Report</button>
                                             </form>
-                                            <!-- Save -->
-                                            <form method="POST" action="save_A.php">
+                                                <!-- Save -->
+                                                <form method="POST" action="save_A.php">
                                                 <input type="hidden" name="article_id" value="<?= $articleId ?>">
                                                 <button type="submit"
-                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i
-                                                        class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
+                                                    style="background: none; border: none; padding: 10px; width: 100%; text-align: left;"><i class="fa fa-bookmark" style="margin-right:10px;"></i>Save</button>
 
                                             </form>
                                         </div>
@@ -237,7 +226,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                 <div class="post-title" style="font-family: Poppins; font-size:40px">
                                     <strong><?= htmlspecialchars($row['title']) ?></strong>
                                 </div>
-                                <div class="post-content" style="font-family: Poppins; font-size:20px; text-align:justify">
+                                <div class="post-content" style="font-family: Poppins; font-size:30px; text-align:justify">
                                     <?= htmlspecialchars($row['abstract']) ?>
                                 </div>
 
@@ -287,7 +276,7 @@ $latest_announcements = getLatestAnnouncements($pdo);
                                             placeholder="Write a comment..." required>
                                         <button class="post-form-button" type="submit">Post</button>
                                     </form>
-
+                                    
                                 </div>
                             </div>
                         <?php endforeach; ?>

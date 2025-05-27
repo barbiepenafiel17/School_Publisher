@@ -66,7 +66,7 @@ $result = $mysqli->query($query);
           <?php endif; ?>
           <h3 class="article-title"><?= htmlspecialchars($article['title']); ?></h3>
           <p class="article-abstract"><?= htmlspecialchars($article['abstract']); ?></p>
-          <a href="view_article.php?article_id=<?= $article['id']; ?>" class="read-more">Read More →</a>
+          <a href="login.php?article_id=<?= $article['id']; ?>" class="read-more">Read More →</a>
         </div>
       </div>
     <?php endwhile; ?>

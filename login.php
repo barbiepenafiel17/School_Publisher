@@ -73,19 +73,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Login - DBCLM College</title>
     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="header.css">
 </head>
 
-<body>
 
+<body>
     <header class="navbar">
         <div class="logo">
             <img src="FinalLogo.jpg" alt="DBCLM Logo">
         </div>
         <nav class="nav-links">
-            <a href="copy_newsfeed_v1.php">Home</a>
-            <a href="#">Latest</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+            <a href="landingpage.php">Home</a>
+            <a href="aboutus.php">About</a>
+            <a href="contactus.php">Contact</a>
         </nav>
         <div class="navbar-right">
             <img src="bell.jpg" alt="Notifications" class="icon-bell">
