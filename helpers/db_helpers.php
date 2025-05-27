@@ -19,7 +19,7 @@ function getUserInfo(PDO $pdo, int $userId)
 }
 
 /**
- * Fetch unread notifications for a user
+ * Fetch unread notifications for a user using notification summary view
  * 
  * @param PDO $pdo Database connection
  * @param int $userId User ID
@@ -33,7 +33,21 @@ function getUnreadNotifications(PDO $pdo, int $userId)
 }
 
 /**
- * Fetch approved articles with user info
+ * Get notification summary using view
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @return array|false Notification summary or false if not found
+ */
+function getNotificationSummary(PDO $pdo, int $userId)
+{
+  $stmt = $pdo->prepare("SELECT * FROM notification_summary_view WHERE user_id = :user_id");
+  $stmt->execute(['user_id' => $userId]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Fetch approved articles with user info using view
  * 
  * @param PDO $pdo Database connection
  * @return array List of articles
@@ -41,15 +55,42 @@ function getUnreadNotifications(PDO $pdo, int $userId)
 function getApprovedArticles(PDO $pdo)
 {
   $stmt = $pdo->query(
-    "SELECT a.*, u.full_name, u.profile_picture,
-        (SELECT COUNT(*) FROM reactions WHERE article_id = a.id AND reaction_type = 'like') AS likes,
-        (SELECT COUNT(*) FROM comments WHERE article_id = a.id) AS comments
-        FROM articles a
-        JOIN users u ON a.user_id = u.id
-        WHERE a.status = 'approved'
-        ORDER BY a.created_at DESC"
+    "SELECT * FROM article_dashboard_view 
+     WHERE status = 'approved'
+     ORDER BY created_at DESC"
   );
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get admin dashboard statistics using view
+ * 
+ * @param PDO $pdo Database connection
+ * @return array Admin dashboard stats
+ */
+function getAdminDashboardStats(PDO $pdo)
+{
+  $stmt = $pdo->query("SELECT * FROM admin_dashboard_stats");
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get user statistics using view
+ * 
+ * @param PDO $pdo Database connection
+ * @param int|null $userId User ID (optional, if null returns all users)
+ * @return array User statistics
+ */
+function getUserStats(PDO $pdo, ?int $userId = null)
+{
+  if ($userId) {
+    $stmt = $pdo->prepare("SELECT * FROM user_stats_view WHERE id = :user_id");
+    $stmt->execute(['user_id' => $userId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  } else {
+    $stmt = $pdo->query("SELECT * FROM user_stats_view ORDER BY created_at DESC");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
 
 /**
@@ -286,4 +327,130 @@ function getFilteredArticlesPaginated(PDO $pdo, array $institutes, string $sortO
 
   $stmt->execute();
   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Approve article using stored procedure
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $articleId Article ID
+ * @param string $approvalNotes Optional approval notes
+ * @return array Result with success status and message
+ */
+function approveArticleWithProcedure(PDO $pdo, int $articleId, string $approvalNotes = '')
+{
+  $stmt = $pdo->prepare("CALL ApproveArticle(:article_id, :approval_notes)");
+  $stmt->execute([
+    'article_id' => $articleId,
+    'approval_notes' => $approvalNotes
+  ]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Reject article using stored procedure
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $articleId Article ID
+ * @param string $rejectionReason Rejection reason
+ * @return array Result with success status and message
+ */
+function rejectArticleWithProcedure(PDO $pdo, int $articleId, string $rejectionReason)
+{
+  $stmt = $pdo->prepare("CALL RejectArticle(:article_id, :rejection_reason)");
+  $stmt->execute([
+    'article_id' => $articleId,
+    'rejection_reason' => $rejectionReason
+  ]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Report article using stored procedure
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @param int $articleId Article ID
+ * @param string $reason Report reason
+ * @return array Result with success status and message
+ */
+function reportArticleWithProcedure(PDO $pdo, int $userId, int $articleId, string $reason = '')
+{
+  $stmt = $pdo->prepare("CALL ReportArticle(:user_id, :article_id, :reason)");
+  $stmt->execute([
+    'user_id' => $userId,
+    'article_id' => $articleId,
+    'reason' => $reason
+  ]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Mark notifications as read using stored procedure
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @param int|null $notificationId Specific notification ID (optional)
+ * @return array Result with success status and message
+ */
+function markNotificationReadWithProcedure(PDO $pdo, int $userId, ?int $notificationId = null)
+{
+  $stmt = $pdo->prepare("CALL MarkNotificationRead(:user_id, :notification_id)");
+  $stmt->execute([
+    'user_id' => $userId,
+    'notification_id' => $notificationId
+  ]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get user dashboard statistics using stored procedure
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @return array User dashboard statistics
+ */
+function getUserDashboardStatsWithProcedure(PDO $pdo, int $userId)
+{
+  $stmt = $pdo->prepare("CALL GetUserDashboardStats(:user_id)");
+  $stmt->execute(['user_id' => $userId]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get saved articles using enhanced view
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @return array List of saved articles with details
+ */
+function getSavedArticlesFromView(PDO $pdo, int $userId)
+{
+  $stmt = $pdo->prepare("SELECT * FROM saved_articles_view WHERE user_id = :user_id ORDER BY saved_at DESC");
+  $stmt->execute(['user_id' => $userId]);
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Register user using stored procedure
+ * 
+ * @param PDO $pdo Database connection
+ * @param string $fullName Full name
+ * @param string $email Email address
+ * @param string $password Hashed password
+ * @param string $role User role
+ * @param string $institute Institute name
+ * @return array Result with success status, message, and user ID
+ */
+function registerUserWithProcedure(PDO $pdo, string $fullName, string $email, string $password, string $role, string $institute)
+{
+  $stmt = $pdo->prepare("CALL RegisterUser(:full_name, :email, :password, :role, :institute)");
+  $stmt->execute([
+    'full_name' => $fullName,
+    'email' => $email,
+    'password' => $password,
+    'role' => $role,
+    'institute' => $institute
+  ]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
 }

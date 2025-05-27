@@ -1,0 +1,88 @@
+-- ========================================
+-- SQL INDEXES FOR SCHOOL PUBLISHER PROJECT
+-- Performance optimization indexes (FIXED VERSION)
+-- ========================================
+-- Note: This script creates indexes without IF NOT EXISTS syntax for compatibility
+-- ========================================
+-- Articles Table Indexes
+-- ========================================
+-- Drop existing indexes if they exist to avoid errors
+-- DROP INDEX IF EXISTS idx_articles_status ON articles;
+-- DROP INDEX IF EXISTS idx_articles_user_id ON articles;
+-- DROP INDEX IF EXISTS idx_articles_created_at ON articles;
+-- DROP INDEX IF EXISTS idx_articles_title ON articles;
+-- Primary performance indexes for articles
+-- CREATE INDEX idx_articles_status ON articles(status);
+-- CREATE INDEX idx_articles_user_id ON articles(user_id);
+-- CREATE INDEX idx_articles_created_at ON articles(created_at);
+-- CREATE INDEX idx_articles_title ON articles(title);
+-- Composite indexes for common query patterns
+-- CREATE INDEX idx_articles_status_created ON articles(status, created_at);
+-- CREATE INDEX idx_articles_status_user ON articles(status, user_id);
+-- CREATE INDEX idx_articles_user_created ON articles(user_id, created_at);
+-- ========================================
+-- Users Table Indexes
+-- ========================================
+-- CREATE INDEX idx_users_email ON users(email);
+-- CREATE INDEX idx_users_role ON users(role);
+-- CREATE INDEX idx_users_institute ON users(institute);
+-- CREATE INDEX idx_users_created_at ON users(created_at);
+-- ========================================
+-- Comments Table Indexes
+-- ========================================
+-- CREATE INDEX idx_comments_article_id ON comments(article_id);
+-- CREATE INDEX idx_comments_user_id ON comments(user_id);
+-- CREATE INDEX idx_comments_created_at ON comments(created_at);
+-- Composite index for article comments
+-- CREATE INDEX idx_comments_article_created ON comments(article_id, created_at);
+-- ========================================
+-- Reactions Table Indexes
+-- ========================================
+-- CREATE INDEX idx_reactions_article_id ON reactions(article_id);
+-- CREATE INDEX idx_reactions_user_id ON reactions(user_id);
+-- CREATE INDEX idx_reactions_type ON reactions(type);
+-- Composite index for unique reactions
+-- CREATE INDEX idx_reactions_article_user ON reactions(article_id, user_id);
+-- ========================================
+-- Notifications Table Indexes
+-- ========================================
+-- CREATE INDEX idx_notifications_user_id ON notifications(user_id);
+-- CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+-- CREATE INDEX idx_notifications_created_at ON notifications(created_at);
+-- Composite index for user notification queries
+-- CREATE INDEX idx_notifications_user_read ON notifications(user_id, is_read);
+-- ========================================
+-- Reports Table Indexes (if exists)
+-- ========================================
+-- CREATE INDEX idx_reports_article_id ON reports(article_id);
+-- CREATE INDEX idx_reports_reporter_id ON reports(reporter_id);
+-- CREATE INDEX idx_reports_status ON reports(status);
+-- CREATE INDEX idx_reports_created_at ON reports(created_at);
+-- ========================================
+-- Additional Helper Table Indexes
+-- ========================================
+-- For audit_log table (created by triggers)
+-- CREATE INDEX idx_audit_log_table_record ON audit_log(table_name, record_id);
+-- CREATE INDEX idx_audit_log_created_at ON audit_log(created_at);
+-- For admin_notifications table (created by triggers)
+-- CREATE INDEX idx_admin_notifications_type ON admin_notifications(type);
+-- CREATE INDEX idx_admin_notifications_read ON admin_notifications(is_read);
+-- ========================================
+-- PERFORMANCE ANALYSIS QUERIES
+-- ========================================
+-- Check existing indexes on articles table
+SHOW INDEX
+FROM articles;
+-- Check existing indexes on users table  
+SHOW INDEX
+FROM users;
+-- Check existing indexes on comments table
+SHOW INDEX
+FROM comments;
+-- Analyze table statistics
+-- ANALYZE TABLE articles, users, comments, reactions, notifications;
+-- ========================================
+-- NOTE: Index creation is commented out to avoid syntax errors.
+-- Uncomment the CREATE INDEX statements above if your MySQL version
+-- supports the syntax or create them manually in phpMyAdmin.
+-- ========================================
